@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="../style.css" media="screen">
+<title>Virtual Braille Display 2026.08.30</title>
+</head>
+<body>
+<h1>Arquitectura técnica</h1>
+<h2>Fuentes analizadas</h2>
+<p>La implementación se diseñó contra copias locales, sin volver a clonarlas:</p>
+<ul>
+<li>NVDA 2026.1.1, etiqueta local <code>release-2026.1.1</code>, commit <code>5d92106f17e461dac62aa48257bbbf4183e033d0</code>.</li>
+<li>NVDA, commit <code>77973a3015e9a58dc8638d9a6dc61b9f60e853b4</code>, árbol 2026.3dev.</li>
+<li>AddonTemplate, commit <code>30318eae085fa81fe3a39045956c7a0516a0f981</code>.</li>
+<li>BrailleExtender, brailleEssentials, rdAccess, BRLTTY, HID-braille-ESP32 y el Braille Viewer histórico.</li>
+<li>Backend oficial de accessible-output2 consultado porque no estaba clonado localmente.</li>
+</ul>
+<h2>Flujo real de Controller Client</h2>
+<p><code>text
+Aplicación externa
+  accessible_output2.outputs.nvda.NVDA.braille(text)
+        |
+        v
+nvdaControllerClient32/64.dll
+  nvdaController_brailleMessage(const wchar_t *message)
+        |
+        v
+RPC nvdaController (nvdaHelperLocal.dll)
+        |
+        | I_RpcBindingInqLocalClientPID -&gt; PID/ejecutable del cliente
+        v
+source/NVDAHelper/__init__.py
+  nvdaController_brailleMessage(text)
+        |
+        | queueHandler.queueFunction(eventQueue, braille.handler.message, text)
+        v
+braille.brailleHandler.BrailleHandler.message(text)
+        |
+        | TextRegion(text); Region.update()
+        | louisHelper.translate(...)
+        v
+BrailleBuffer.update() / BrailleHandler.update()
+        |
+        | windowBrailleCells + cursor + padding
+        v
+BrailleHandler._writeCells(cells)
+        |
+        | pre_writeCells(cells, rawText, currentCellCount)
+        | normalización al tamaño del driver
+        v
+brailleDisplayDrivers.virtualBraille.BrailleDisplayDriver.display(cells)
+        |
+        v
+FrameStore -&gt; visor / historial / exportación manual</code></p>
+<h3>Funciones y clases concretas</h3>
+<ol>
+<li><code>accessible_output2/outputs/nvda.py</code>, <code>NVDA.braille</code>: invoca <code>self.lib.nvdaController_brailleMessage(text)</code>.</li>
+<li><code>nvdaHelper/interfaces/nvdaController/nvdaController.idl</code>: define <code>brailleMessage([in,string] const wchar_t* message)</code>.</li>
+<li><code>source/NVDAHelper/__init__.py</code>, <code>nvdaController_brailleMessage</code>: comprueba el modo de reposo del foco y <code>config.conf["braille"]["reportLiveRegions"]</code>; encola <code>braille.handler.message</code>.</li>
+<li><code>source/braille/brailleHandler.py</code>, <code>BrailleHandler.message</code>: crea <code>TextRegion</code>, actualiza la región y el buffer de mensajes.</li>
+<li><code>source/braille/regions/base.py</code>, <code>Region.update</code>: llama a <code>louisHelper.translate</code> con la tabla activa y produce <code>brailleCells</code>.</li>
+<li><code>source/braille/brailleHandler.py</code>, <code>BrailleHandler.update</code>: toma <code>windowBrailleCells</code>, asigna <code>self._rawText = self.buffer.windowRawText</code>, añade blancos y conserva la posición del cursor.</li>
+<li><code>BrailleHandler._writeCells</code>: notifica <code>pre_writeCells</code> con celdas, <code>rawText</code> y tamaño; después normaliza filas/celdas y llama al driver.</li>
+<li><code>BrailleDisplayDriver.display</code>: recibe la colección final que constituye el nivel B.</li>
+</ol>
+<h2>Componentes del complemento</h2>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Responsabilidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>virtualBraille.py</code></td>
+<td>Driver real y seleccionable; copia el argumento de <code>display</code>.</td>
+</tr>
+<tr>
+<td><code>frameStore.py</code></td>
+<td>Historiales acotados, IDs, timestamps, formatos derivados, filtrado y estadísticas.</td>
+</tr>
+<tr>
+<td><code>brailleUtils.py</code></td>
+<td>Conversión byte/Unicode/puntos, comparación y reparto en ventanas.</td>
+</tr>
+<tr>
+<td><code>brailleDecoder.py</code></td>
+<td>Traducción inversa aproximada y bajo demanda fuera del camino crítico.</td>
+</tr>
+<tr>
+<td><code>controllerTracker.py</code></td>
+<td>Hook reversible del callback nativo; captura texto, PID RPC y ejecutable.</td>
+</tr>
+<tr>
+<td><code>contextTracker.py</code></td>
+<td>Lectura del búfer, el amarre y el objeto de NVDA representados en cada frame.</td>
+</tr>
+<tr>
+<td><code>originTracker.py</code></td>
+<td>Correlación textual y temporal conservadora, y clasificación por búfer.</td>
+</tr>
+<tr>
+<td><code>diagnostics.py</code></td>
+<td>Explicación en lenguaje humano y detección de problemas de accesibilidad.</td>
+</tr>
+<tr>
+<td><code>frameText.py</code></td>
+<td>Elección del texto legible del frame indicando siempre su procedencia.</td>
+</tr>
+<tr>
+<td><code>gestures.py</code></td>
+<td>Teclas de encaminamiento y acordes braille simulados como gestos reales.</td>
+</tr>
+<tr>
+<td><code>runtime.py</code></td>
+<td>Estado compartido, <code>pre_writeCells</code>, filtro por aplicación y conexión del driver.</td>
+</tr>
+<tr>
+<td><code>gui.py</code></td>
+<td>Visor wx accesible con historiales, comparación, simulación e interacción.</td>
+</tr>
+<tr>
+<td><code>simpleView.py</code></td>
+<td>Ventana explicada en lenguaje llano para desarrolladores no usuarios de braille.</td>
+</tr>
+<tr>
+<td><code>settingsDialog.py</code></td>
+<td>Configuración con pestañas construida con <code>gui.guiHelper</code>.</td>
+</tr>
+<tr>
+<td><code>accessibleList.py</code></td>
+<td>Listas con navegación por columnas anunciada mediante <code>ui.message</code>.</td>
+</tr>
+<tr>
+<td><code>guiUtils.py</code></td>
+<td>Ayudantes que garantizan el orden etiqueta-control exigido por los lectores.</td>
+</tr>
+<tr>
+<td><code>logWriter.py</code></td>
+<td>Exportación manual TXT/JSON/JSONL y registro continuo en un hilo aparte.</td>
+</tr>
+<tr>
+<td><code>nvdaCompat.py</code></td>
+<td>Selección localizada de las APIs braille equivalentes de NVDA 2026.1 y 2026.3.</td>
+</tr>
+</tbody>
+</table>
+<h3>Contexto capturado por frame</h3>
+<p><code>contextTracker.readCurrentContext</code> se ejecuta dentro de <code>pre_writeCells</code>, es decir, mientras
+NVDA todavía tiene montado el búfer que ha producido las celdas. Obtiene:</p>
+<ul>
+<li>si el búfer activo es <code>handler.mainBuffer</code> o <code>handler.messageBuffer</code>;</li>
+<li>el resultado de <code>handler.getTether()</code>;</li>
+<li>el primer <code>region.obj</code> de <code>buffer.visibleRegions</code> y, a partir de él, <code>processID</code>,
+  <code>appModule.appName</code>, nombre y rol.</li>
+</ul>
+<p>Con esa evidencia el origen deja de ser desconocido en la navegación normal: un frame del
+búfer de mensajes se clasifica como <code>BRAILLE_MESSAGE</code> y uno del búfer principal como
+<code>NVDA_NAVIGATION</code>. La confianza <code>CONFIRMED</code> de esos dos casos se refiere exclusivamente a
+<strong>qué parte de NVDA generó las celdas</strong>, nunca a qué aplicación pidió el mensaje.</p>
+<p>Toda la lectura está protegida: cualquier excepción devuelve un contexto vacío y el frame se
+captura igualmente, porque las celdas son la fuente de verdad y nunca deben perderse.</p>
+<p>El nombre y el rol del objeto se memorizan con una referencia débil al último objeto
+consultado. El parpadeo del cursor de NVDA provoca varias escrituras por segundo sobre el mismo
+objeto y esas propiedades pueden implicar una consulta viva a la aplicación; con la memoria
+sólo se consultan cuando el objeto cambia realmente.</p>
+<h2><code>display(cells)</code> y rendimiento</h2>
+<p><code>display</code> no traduce texto, no consulta el foco, no escribe archivos y no toca controles wx. Entrega la colección a <code>RuntimeState.captureDisplay</code>, que:</p>
+<ol>
+<li>consume un pequeño contexto ya preparado por <code>pre_writeCells</code>;</li>
+<li>copia los valores a <code>bytes</code>;</li>
+<li>asigna ID, tiempo de pared, <code>perf_counter_ns</code> e ID de hilo;</li>
+<li>materializa formatos de un máximo configurado de 256 celdas;</li>
+<li>añade el frame a una <code>deque</code> protegida por <code>RLock</code>;</li>
+<li>notifica observadores ligeros.</li>
+</ol>
+<p>El contexto consumido del mismo hilo conserva también <code>rawText</code>. NVDA lo documenta como el texto sin traducir que corresponde a las celdas y, en el flujo actual, procede de <code>BrailleBuffer.windowRawText</code>. El complemento lo guarda como <code>associatedText</code> y no reemplaza a los bytes finales.</p>
+<p>Python mantiene este valor como Unicode. La GUI lo presenta directamente y las exportaciones TXT, JSON y JSONL lo codifican con UTF-8 y sin escapar innecesariamente caracteres en JSON.</p>
+<p>Si <code>rawText</code> y el texto externo no están disponibles, <code>brailleDecoder.backTranslateCells</code> puede producir una ayuda aproximada con la tabla activa. En NVDA 2026.3 usa <code>louisHelper.backTranslate</code>; en 2026.1 adapta directamente <code>louis.backTranslate</code>. Esta operación sólo se ejecuta al presentar, copiar o comparar un frame, nunca en <code>display</code>, y el resultado se etiqueta como aproximado.</p>
+<p>Mientras el visor tiene el foco, descarta sus notificaciones automáticas de presentación, pero no los frames almacenados. Esto corta el ciclo visor -&gt; accesibilidad de wx -&gt; salida braille -&gt; visor. El botón <strong>Actualizar ahora</strong> obtiene una instantánea explícita y estable.</p>
+<p>El visor agrupa notificaciones y encola como máximo un <code>wx.CallAfter</code> pendiente. Toda E/S se ejecuta únicamente al pulsar Guardar.</p>
+<p>El driver declara <code>isThreadSafe = False</code>. En este caso NVDA llama inmediatamente a <code>display</code> después de <code>pre_writeCells</code>, lo que evita perder la relación de ese contexto y evita el mecanismo de coalescencia que descarta escrituras intermedias para drivers en segundo plano. La operación se mantiene acotada y sin E/S.</p>
+<h2>Cambio de geometría</h2>
+<p>El tamaño se guarda en <code>virtualBrailleDisplay.cellCount</code> y el número de filas en
+<code>virtualBrailleDisplay.rowCount</code>. Si el driver está activo, <code>RuntimeState.applyDisplayGeometry</code>
+cambia temporalmente a <code>noBraille</code> como fallback y vuelve a seleccionar <code>virtualBraille</code>. El
+nuevo constructor fija <code>numCols</code> y <code>numRows</code>; NVDA reconstruye dimensiones, buffer, ventana y
+traducción. No se corta una cadena ya capturada.</p>
+<p>Para líneas de más de una fila, <code>BrailleDisplayDriver</code> de NVDA prohíbe asignar <code>numCells</code> y
+exige <code>numCols</code> y <code>numRows</code>, que es lo que hace el driver.</p>
+<h2>Registro continuo</h2>
+<p><code>logWriter.ContinuousLogger</code> mantiene un hilo escritor y una cola acotada. <code>display(cells)</code>
+sólo serializa el registro y lo deposita en la cola; si la cola se llena se descartan
+registros y se lleva la cuenta, en lugar de bloquear el subsistema braille de NVDA. El
+registro está desactivado de fábrica y la interfaz avisa de que puede contener datos privados.</p>
+<h2>Gestos simulados</h2>
+<p><code>gestures.RouteToGesture</code> reproduce una tecla de encaminamiento con <code>source = "virtualBraille"</code>,
+<code>id = "route"</code>, <code>cellIndexes</code> y el script <code>globalCommands.commands.script_braille_routeTo</code>, el
+mismo esquema que usa el Braille Viewer de NVDA. <code>gestures.DotsInputGesture</code> hereda de
+<code>BrailleDisplayGesture</code> y <code>BrailleInputGesture</code>, fija <code>dots</code> y <code>space</code> y compone su
+identificador con <code>_makeDotsId()</code>, igual que los drivers reales con teclado braille. Ambos se
+entregan con <code>inputCore.manager.executeGesture</code>, de modo que NVDA los procesa exactamente
+igual que si procedieran de una línea física.</p>
+<h2>APIs utilizadas</h2>
+<h3>Extensiones y APIs estables observadas</h3>
+<ul>
+<li>NVDA 2026.1: <code>braille.BrailleDisplayDriver</code>, <code>braille.BrailleDisplayGesture</code>,
+  <code>brailleInput.BrailleInputGesture</code> y <code>braille.pre_writeCells.register/unregister</code>.</li>
+<li>NVDA 2026.3: <code>braille.display.driver.BrailleDisplayDriver</code>,
+  <code>braille.display.gesture.BrailleDisplayGesture</code>, <code>braille.input.gesture.BrailleInputGesture</code>
+  y <code>braille.extensions.pre_writeCells.register/unregister</code>.</li>
+<li><code>braille.handler.buffer</code>, <code>mainBuffer</code>, <code>messageBuffer</code>, <code>visibleRegions</code> y <code>getTether</code>.</li>
+<li><code>braille.handler.scrollForward</code> y <code>braille.handler.scrollBack</code>.</li>
+<li><code>inputCore.manager.executeGesture</code> y <code>globalCommands.commands.script_braille_routeTo</code>.</li>
+<li><code>api.getFocusObject</code> y <code>api.copyToClip</code>.</li>
+<li><code>ui.message</code> y <code>speech.speakMessage</code> para anunciar la navegación por columnas.</li>
+<li><code>gui.guiHelper</code> (<code>BoxSizerHelper</code>, <code>ButtonHelper</code>, <code>associateElements</code>).</li>
+<li><code>gui.message.MessageDialog</code>, <code>DialogType</code>, <code>DefaultButton</code> y <code>ReturnCode</code>.</li>
+<li><code>addonHandler.initTranslation</code>.</li>
+<li><code>globalPluginHandler.GlobalPlugin</code>.</li>
+<li><code>scriptHandler.script</code>.</li>
+<li>wxPython suministrado por NVDA.</li>
+</ul>
+<p><code>nvdaCompat.py</code> intenta primero la organización moderna. Si esos imports no existen, utiliza exclusivamente los nombres equivalentes comprobados en la etiqueta local de NVDA 2026.1.1. No modifica <code>sys.path</code>, no parchea módulos y no oculta errores ajenos a esa reorganización.</p>
+<h3>APIs internas o privadas</h3>
+<ul>
+<li><code>NVDAHelper._setDllFuncPointer</code>.</li>
+<li><code>NVDAHelper.localLib.dll</code> y el símbolo de datos <code>_nvdaController_brailleMessage</code>.</li>
+<li><code>winBindings.rpcrt4.I_RpcBindingInqLocalClientPID</code> para consultar al cliente mientras se atiende la llamada RPC.</li>
+<li><code>appModuleHandler.getAppNameFromProcessID</code> para resolver el ejecutable del PID confirmado.</li>
+<li><code>braille.handler.setDisplayByName</code>, incluido el argumento <code>isFallback</code>.</li>
+</ul>
+<p>Todas las APIs privadas están encapsuladas. El hook se valida, evita una instalación doble, mantiene una referencia fuerte al callback de <code>ctypes</code> y restaura el puntero original al descargar el complemento. Un fallo al consultar o resolver el proceso deja esos campos vacíos y no impide que el callback original continúe.</p>
+<h2>accessible-output2</h2>
+<p>El backend oficial usa <code>nvdaController_testIfRunning</code>, <code>nvdaController_speakText</code>, <code>nvdaController_cancelSpeech</code> y <code>nvdaController_brailleMessage</code>, cargando una DLL de 32 o 64 bits según el intérprete. <code>Auto.get_first_available_output</code> escoge el primer backend activo. En la versión inspeccionada, <code>Auto.output</code> sólo llama a <code>speak</code>; por eso las pruebas llaman a <code>braille</code> explícitamente.</p>
+</body>
+</html>

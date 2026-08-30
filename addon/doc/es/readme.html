@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="../style.css" media="screen">
+<title>Virtual Braille Display 2026.08.30</title>
+</head>
+<body>
+<h1>Virtual Braille Display 2026.08.30</h1>
+<p>Complemento de NVDA que se registra como una <strong>línea braille más</strong> y guarda, byte a byte, lo que
+NVDA entrega a <code>display(cells)</code>. Sirve para saber qué recibiría una línea braille real sin tener
+una, y para comprobar si una aplicación expone información útil en braille.</p>
+<p>Autor: Héctor J. Benítez Corredera · Licencia: GNU GPL versión 2 o posterior</p>
+<hr />
+<h2>Índice</h2>
+<ol>
+<li><a href="#que-hace">Qué hace</a></li>
+<li><a href="#instalacion">Requisitos e instalación</a></li>
+<li><a href="#primeros-pasos">Primeros pasos</a></li>
+<li><a href="#submenu">El submenú de Herramientas</a></li>
+<li><a href="#gestos">Gestos asignables</a></li>
+<li><a href="#visor">El visor</a></li>
+<li><a href="#explicacion-sencilla">La explicación sencilla</a></li>
+<li><a href="#filtro">Filtrar por una aplicación</a></li>
+<li><a href="#listas">Navegar por las listas</a></li>
+<li><a href="#configuracion">Configuración</a></li>
+<li><a href="#privacidad">Privacidad y registro</a></li>
+<li><a href="#aplicaciones-externas">Probar con aplicaciones externas</a></li>
+<li><a href="#origen">Origen y confianza</a></li>
+<li><a href="#traducciones">Traducciones</a></li>
+<li><a href="#desarrollo">Desarrollo</a></li>
+<li><a href="#problemas">Problemas frecuentes</a></li>
+<li><a href="#limitaciones">Limitaciones y hoja de ruta</a></li>
+</ol>
+<hr />
+<p><a id="que-hace"></a></p>
+<h2>Qué hace</h2>
+<p>Captura dos niveles de información y nunca los mezcla:</p>
+<table>
+<thead>
+<tr>
+<th>Nivel</th>
+<th>Qué es</th>
+<th>Dónde se ve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>B — Frames</strong></td>
+<td>Los bytes exactos que NVDA entrega a <code>display(cells)</code>. Es la fuente de verdad.</td>
+<td>Historial de frames</td>
+</tr>
+<tr>
+<td><strong>A — Eventos externos</strong></td>
+<td>El texto que una aplicación pidió mostrar con <code>nvdaController_brailleMessage</code>.</td>
+<td>Historial de eventos externos</td>
+</tr>
+</tbody>
+</table>
+<p>Cada frame guarda además <strong>contexto</strong> leído del propio NVDA justo antes de escribir: qué búfer lo
+generó (navegación o mensaje), a qué está amarrada la línea, y el proceso, la aplicación, el
+nombre y el rol del objeto que se estaba representando.</p>
+<p>Nunca reconstruye el braille desde la voz, ni usa OCR, ni supone que el proceso enfocado es el
+que llamó al Controller Client, ni inventa un PID.</p>
+<p><a id="instalacion"></a></p>
+<h2>Requisitos e instalación</h2>
+<p>Necesita <strong>Windows</strong> y <strong>NVDA 2026.1 o posterior</strong> (funciona con el módulo <code>braille</code> único de
+2026.1 y con el paquete reorganizado de 2026.3). No requiere ninguna biblioteca externa. Los
+ejemplos sí necesitan Python 3, <code>accessible-output2</code> y <code>wxPython</code>.</p>
+<ol>
+<li>Abra <code>virtualBrailleDisplay-2026.08.30.nvda-addon</code> y confirme la instalación.</li>
+<li>Reinicie NVDA.</li>
+<li>En las opciones de braille de NVDA, seleccione <strong>Virtual Braille Display</strong> como pantalla braille.</li>
+</ol>
+<p><a id="primeros-pasos"></a></p>
+<h2>Primeros pasos</h2>
+<ol>
+<li>Asigne un gesto a <strong>Abre el visor filtrado por la aplicación que tiene el foco</strong>, en
+   <strong>Preferencias &gt; Gestos de entrada &gt; Virtual Braille Display</strong>.</li>
+<li>Ponga el foco en la aplicación que quiere revisar y pulse ese gesto: el complemento captura su
+   PID y abre el visor mostrando sólo lo que produce ella.</li>
+<li>Use la aplicación con normalidad; los frames van apareciendo en el historial.</li>
+<li>Si no lee braille, pulse <strong>Vista sencilla</strong>: obtendrá el mismo dato explicado en español llano.</li>
+</ol>
+<p><a id="submenu"></a></p>
+<h2>El submenú de Herramientas</h2>
+<p>Todo está agrupado en <strong>NVDA &gt; Herramientas &gt; Virtual Braille Display</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Visor de frames y eventos…</td>
+<td>Abre el visor técnico.</td>
+</tr>
+<tr>
+<td>Explicación sencilla…</td>
+<td>Abre la ventana en lenguaje llano.</td>
+</tr>
+<tr>
+<td>Conectar la línea virtual</td>
+<td>Selecciona Virtual Braille Display como pantalla braille.</td>
+</tr>
+<tr>
+<td>Desconectar la línea virtual</td>
+<td>Selecciona «sin braille» conservando los historiales.</td>
+</tr>
+<tr>
+<td>Filtrar por la aplicación que tenía el foco</td>
+<td>Filtra por la aplicación desde la que abrió el menú.</td>
+</tr>
+<tr>
+<td>Quitar el filtro de aplicación</td>
+<td>Vuelve a mostrar todas las aplicaciones.</td>
+</tr>
+<tr>
+<td>Anunciar el último frame</td>
+<td>Dice el texto y la ocupación del último frame.</td>
+</tr>
+<tr>
+<td>Buscar traducciones y documentación nuevas</td>
+<td>Descarga los recursos publicados desde la última versión.</td>
+</tr>
+<tr>
+<td>Configuración…</td>
+<td>Abre el diálogo con pestañas.</td>
+</tr>
+<tr>
+<td>Ayuda del complemento</td>
+<td>Abre esta documentación.</td>
+</tr>
+</tbody>
+</table>
+<p>Dos detalles pensados para que el menú funcione de verdad:</p>
+<ul>
+<li><strong>El filtro acierta con la aplicación.</strong> Al abrir el menú el foco pasa al propio menú, que
+  pertenece a NVDA. El complemento descarta ese PID y usa <code>gui.mainFrame.prevFocus</code>, el objeto
+  que NVDA guarda al abrir un menú: exactamente la aplicación desde la que usted lo abrió.</li>
+<li><strong>Los avisos no se pierden.</strong> Un <code>ui.message</code> emitido al cerrarse el menú lo cancela el anuncio
+  de la ventana que recupera el foco. Los avisos del menú usan <code>ui.delayedMessage</code>, la función
+  que NVDA ofrece para confirmar acciones del menú. Si prefiere no depender de la voz, en
+  <a href="#configuracion">Configuración</a> puede pedir un cuadro de mensaje.</li>
+</ul>
+<p><a id="gestos"></a></p>
+<h2>Gestos asignables</h2>
+<p>En <strong>Preferencias &gt; Gestos de entrada</strong>, categoría <strong>Virtual Braille Display</strong>. Ninguno trae
+tecla asignada de fábrica.</p>
+<table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Abre el visor de Virtual Braille Display</td>
+<td>Abre el visor. Según la configuración, filtra antes por la aplicación enfocada o abre la vista sencilla.</td>
+</tr>
+<tr>
+<td>Abre el visor filtrado por la aplicación que tiene el foco</td>
+<td>Captura el PID de su aplicación y abre el visor limitado a ella.</td>
+</tr>
+<tr>
+<td>Activa o desactiva el filtro por la aplicación que tiene el foco</td>
+<td>Alterna el filtro sin abrir ninguna ventana.</td>
+</tr>
+<tr>
+<td>Abre la explicación sencilla de la salida braille</td>
+<td>Abre la ventana en lenguaje llano.</td>
+</tr>
+<tr>
+<td>Anuncia el último frame recibido por la línea virtual</td>
+<td>Dice el texto y la ocupación del último frame.</td>
+</tr>
+<tr>
+<td>Busca traducciones y documentación nuevas del complemento</td>
+<td>Comprueba si hay recursos nuevos sin esperar a la comprobación automática.</td>
+</tr>
+</tbody>
+</table>
+<p><a id="visor"></a></p>
+<h2>El visor</h2>
+<p>Empieza con un <strong>resumen de estado</strong> enfocable con Tab: conexión, geometría, modo del visor,
+filtro activo y número de frames y eventos. Debajo, siete pestañas:</p>
+<table>
+<thead>
+<tr>
+<th>Pestaña</th>
+<th>Contenido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Resumen amigable</td>
+<td>Ocupación real del frame, origen y confianza, parte de NVDA que lo generó, aplicación representada, aplicación solicitante y PID, texto legible y su procedencia.</td>
+</tr>
+<tr>
+<td>Datos técnicos exactos</td>
+<td>Unicode Braille, hexadecimal, decimal, binario, puntos por celda y reparto por filas.</td>
+</tr>
+<tr>
+<td>Historial de frames</td>
+<td>Lista accesible con filtro de texto y desplegable de aplicación. Seleccionar una fila fija ese frame.</td>
+</tr>
+<tr>
+<td>Eventos externos</td>
+<td>Solicitudes recibidas por Controller Client, con PID, aplicación y frame correlacionado.</td>
+</tr>
+<tr>
+<td>Comparación</td>
+<td>Dos desplegables <strong>Frame A</strong> y <strong>Frame B</strong> con los últimos cien frames, más los atajos <em>Comparar los dos últimos</em>, <em>Comparar antepenúltimo con último</em> y <em>Usar el frame mostrado como B</em>. El resultado explica cuántas celdas cambian y, en cada una, patrón Unicode, puntos y valor hexadecimal.</td>
+</tr>
+<tr>
+<td>Simulación de tamaño</td>
+<td>Reparte el mismo buffer en las ventanas que mostraría una línea de 14, 20, 32, 40, 64 u 80 celdas. No traduce nada de nuevo: agrupa de otro modo las mismas celdas.</td>
+</tr>
+<tr>
+<td>Interacción con la línea</td>
+<td>Teclas de encaminamiento, desplazar atrás y adelante, y acordes braille de los puntos 1 a 8 más espacio. Se entregan a NVDA como gestos reales; requieren la línea conectada.</td>
+</tr>
+</tbody>
+</table>
+<p>Botones: <strong>Conectar</strong>, <strong>Desconectar</strong>, <strong>Pausar actualizaciones</strong> (sólo la interfaz; la captura
+sigue), <strong>Fijar frame mostrado</strong>, <strong>Actualizar ahora</strong>, <strong>Filtrar por aplicación enfocada</strong>,
+<strong>Quitar filtro</strong>, <strong>Vista sencilla</strong>, <strong>Copiar</strong>, <strong>Guardar…</strong>, <strong>Limpiar</strong>, <strong>Configuración…</strong>
+y <strong>Cerrar</strong>.</p>
+<p>Mientras el visor tiene el foco no se refresca solo, para no crear un bucle entre su propia
+accesibilidad y la salida braille. Use <strong>Actualizar ahora</strong> para cargar una instantánea.</p>
+<p><a id="explicacion-sencilla"></a></p>
+<h2>La explicación sencilla</h2>
+<p>Ventana pensada para quien ve, no conoce braille y quiere que su aplicación sea accesible.
+Muestra qué texto estaría leyendo una persona con línea braille, de dónde sale, de qué aplicación
+y cuánto espacio ocupa; y debajo, una revisión automática:</p>
+<table>
+<thead>
+<tr>
+<th>Observación</th>
+<th>Qué significa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>La línea braille se quedó en blanco</td>
+<td>Nadie percibe nada. Suele ser un control sin nombre accesible o una ventana que no expone texto.</td>
+</tr>
+<tr>
+<td>Hay puntos pero no se pudo recuperar el texto</td>
+<td>Revise la tabla braille activa.</td>
+</tr>
+<tr>
+<td>El contenido llena la línea completa</td>
+<td>Probablemente el texto continúa y hay que desplazar la línea; ponga lo importante al principio.</td>
+</tr>
+<tr>
+<td>El contenido casi llena la línea</td>
+<td>En una línea de 14 o 20 celdas ya no cabría de una vez.</td>
+</tr>
+<tr>
+<td>En una línea de 20 celdas ocuparía varias ventanas</td>
+<td>Indica cuántos desplazamientos harían falta.</td>
+</tr>
+<tr>
+<td>Procede de una solicitud de una aplicación externa</td>
+<td>La atribución es probable, nunca confirmada.</td>
+</tr>
+<tr>
+<td>No se pudo determinar el origen</td>
+<td>Las celdas siguen siendo exactas; lo desconocido es qué parte de NVDA las produjo.</td>
+</tr>
+<tr>
+<td>Sin aplicación identificada</td>
+<td>Ni el contexto ni una solicitud externa aportaron un proceso, y no se deduce del foco.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Copiar informe</strong> lleva todo el texto al portapapeles.</p>
+<p><a id="filtro"></a></p>
+<h2>Filtrar por una aplicación</h2>
+<p>Sirve para ver sólo lo que produce su programa. Hay tres formas: el gesto de teclado (la mejor,
+porque el foco todavía es el de su aplicación), el submenú de Herramientas, y el desplegable
+<strong>Mostrar sólo la aplicación</strong> del historial de frames.</p>
+<p>El filtro compara con dos datos reales, nunca con una suposición: el PID de contexto del frame y
+el PID confirmado por RPC de un evento externo correlacionado. Afecta al historial, la
+comparación, las estadísticas, la exportación y la explicación sencilla, pero <strong>no cambia el
+origen ni la confianza</strong> de ningún frame: es una decisión de visualización.</p>
+<p>El botón <em>Filtrar por aplicación enfocada</em> dentro del visor avisa si no puede determinar la
+aplicación, porque con el visor abierto el foco es el propio visor.</p>
+<p><a id="listas"></a></p>
+<h2>Navegar por las listas</h2>
+<p>NVDA ya lee la fila entera con las flechas arriba y abajo. El complemento añade el recorrido
+celda a celda:</p>
+<table>
+<thead>
+<tr>
+<th>Tecla</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Flecha derecha / izquierda</td>
+<td>Columna siguiente / anterior de la fila enfocada.</td>
+</tr>
+<tr>
+<td>Ctrl+1 … Ctrl+9</td>
+<td>Salta directamente a esa columna.</td>
+</tr>
+<tr>
+<td>Ctrl+Mayús+C</td>
+<td>Copia el texto íntegro de la celda enfocada.</td>
+</tr>
+</tbody>
+</table>
+<p>Los anuncios usan <code>ui.message</code>, la función propia de NVDA, que habla y envía el texto a la línea
+braille a la vez; no interviene ninguna biblioteca externa. Las listas guardan el texto
+<strong>completo</strong> de cada celda, porque el control nativo de Windows recorta a unos 511 caracteres.</p>
+<p><a id="configuracion"></a></p>
+<h2>Configuración</h2>
+<p>Seis pestañas. Todos los controles se crean con <code>gui.guiHelper</code>, que sitúa la etiqueta antes
+del control; ése es el orden que necesita un lector de pantalla para anunciar el nombre del campo
+además de su valor.</p>
+<table>
+<thead>
+<tr>
+<th>Pestaña</th>
+<th>Opciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Línea braille</strong></td>
+<td>Celdas por fila (14, 20, 32, 40, 64, 80 o personalizado de 1 a 256) y filas de la línea (1 a 40, para simular una línea multilínea). Al cambiarlas, NVDA reinicializa el driver y <strong>recalcula de verdad</strong> la salida braille.</td>
+</tr>
+<tr>
+<td><strong>Captura e historial</strong></td>
+<td>Frames y eventos conservados (10 a 10000); no guardar frames vacíos; no guardar frames repetidos; seguir el frame más reciente al abrir; abrir primero la vista sencilla; filtrar por la aplicación enfocada al abrir con un gesto.</td>
+</tr>
+<tr>
+<td><strong>Correlación de orígenes</strong></td>
+<td>Ventana de correlación (50 a 10000 ms) y ventana sólo temporal (0 a 2000 ms), que sólo se usa si no hay coincidencia de texto y existe un único candidato.</td>
+</tr>
+<tr>
+<td><strong>Listas y avisos</strong></td>
+<td>Qué se dice al recorrer columnas: número de fila, total de filas, nombre de columna, contenido, aviso de celda vacía, vuelta al final y anuncio sólo por voz. Y <strong>avisos con el resultado de una acción</strong>: voz y braille, cuadro de mensaje, o ambos.</td>
+</tr>
+<tr>
+<td><strong>Actualizaciones</strong></td>
+<td>Comprobar automáticamente al iniciar NVDA y horas entre comprobaciones.</td>
+</tr>
+<tr>
+<td><strong>Registro y privacidad</strong></td>
+<td>Registro continuo, su formato (JSON Lines o texto) y el archivo de destino.</td>
+</tr>
+</tbody>
+</table>
+<p>Si desactiva todas las opciones de lectura de columnas, se sigue diciendo el contenido de la
+celda, para no dejar la navegación en silencio.</p>
+<p><a id="privacidad"></a></p>
+<h2>Privacidad y registro</h2>
+<p>El braille que recibe la línea puede contener contraseñas, documentos, mensajes y notificaciones.</p>
+<ul>
+<li>Los historiales viven <strong>sólo en memoria</strong> y desaparecen al cerrar NVDA.</li>
+<li>No se escribe nada en disco automáticamente.</li>
+<li><strong>Guardar…</strong> exporta una instantánea en TXT, JSON o JSONL, en UTF-8 y tras una advertencia
+  explícita. En JSONL cada registro lleva un campo <code>type</code> con valor <code>frame</code> o <code>externalEvent</code>.</li>
+<li>El <strong>registro continuo</strong> está desactivado de fábrica. Cuando se activa, escribe en un hilo
+  aparte con una cola acotada: <code>display(cells)</code> sólo deposita el registro y sigue. Si el disco no
+  sigue el ritmo se descartan registros y se lleva la cuenta, antes que ralentizar a NVDA.</li>
+</ul>
+<p>Actívelo mientras depure y desactívelo después.</p>
+<p><a id="aplicaciones-externas"></a></p>
+<h2>Probar con aplicaciones externas</h2>
+<p>Funciona con aplicaciones ya existentes, sin modificarlas:</p>
+<p>```python
+from accessible_output2.outputs.auto import Auto</p>
+<p>output = Auto()
+output.braille("Descarga completada")
+```</p>
+<p>El recorrido es: la aplicación llama a <code>nvdaController_brailleMessage</code> en la DLL del Controller
+Client → RPC → <code>NVDAHelper</code> encola <code>BrailleHandler.message(text)</code> → <code>TextRegion</code> y liblouis →
+<code>_writeCells</code> notifica <code>pre_writeCells</code> → <code>display(cells)</code> en la línea virtual.</p>
+<p>En <code>examples/</code> hay dos programas que se ejecutan <strong>fuera</strong> de NVDA:
+<code>test_accessible_output2.py</code>, que comprueba que NVDA está activo y permite repetir mensajes, y
+<code>wx_test_app.py</code>, una aplicación wxPython con botones para enviar a voz y braille o sólo a
+braille. En la versión de <code>accessible_output2</code> analizada, <code>Auto.output</code> sólo habla; por eso los
+ejemplos llaman a <code>braille(text)</code> explícitamente.</p>
+<p><a id="origen"></a></p>
+<h2>Origen y confianza</h2>
+<p>Cada frame lleva un origen y un nivel de confianza:</p>
+<table>
+<thead>
+<tr>
+<th>Origen</th>
+<th>Cuándo se usa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NVDA_NAVIGATION</code></td>
+<td>El búfer activo era el principal y tenía regiones visibles.</td>
+</tr>
+<tr>
+<td><code>BRAILLE_MESSAGE</code></td>
+<td>El búfer activo era el de mensajes de NVDA.</td>
+</tr>
+<tr>
+<td><code>CORRELATED_EXTERNAL_MESSAGE</code></td>
+<td>Se correlacionó con una solicitud externa.</td>
+</tr>
+<tr>
+<td><code>UNKNOWN</code></td>
+<td>NVDA no aportó contexto suficiente.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Confianza</th>
+<th>Qué significa exactamente</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CONFIRMED</code></td>
+<td>La identidad del búfer de NVDA es comprobable. Confirma <strong>qué parte de NVDA</strong> generó las celdas, nunca qué aplicación pidió el mensaje.</td>
+</tr>
+<tr>
+<td><code>PROBABLE</code></td>
+<td>Correlación por texto y tiempo con una solicitud externa.</td>
+</tr>
+<tr>
+<td><code>CONTEXT</code></td>
+<td>Sólo hay contexto; no se atribuye origen.</td>
+</tr>
+<tr>
+<td><code>UNKNOWN</code></td>
+<td>Sin determinar.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>La distinción clave.</strong> El visor muestra dos aplicaciones distintas y nunca las confunde:</p>
+<ul>
+<li><em>Aplicación cuyo contenido se representaba</em>: contexto obtenido de <code>region.obj</code>. Responde a «de
+  quién es el texto que se está mostrando».</li>
+<li><em>Aplicación solicitante</em>: PID confirmado por <code>I_RpcBindingInqLocalClientPID</code> mientras se
+  atendía la llamada RPC. Responde a «quién llamó a <code>nvdaController_brailleMessage</code>».</li>
+</ul>
+<p>NVDA no transporta la identidad del cliente RPC hasta <code>display(cells)</code>. Por eso la identidad del
+evento es confirmada, pero su asociación con un frame posterior es, como mucho, probable. El
+detalle completo está en <a href="docs/origin-tracking.md"><code>docs/origin-tracking.md</code></a>.</p>
+<p><a id="traducciones"></a></p>
+<h2>Traducciones</h2>
+<p>El complemento está escrito en español y admite traducciones a cualquier idioma. Lo importante:
+<strong>las traducciones y la documentación viajan aparte del complemento</strong>, en una release de
+recursos, de modo que llegan al usuario sin instalar una versión nueva.</p>
+<p><strong>Si quiere traducirlo:</strong> parta de <code>virtualBrailleDisplay.pot</code>, que está en la raíz del
+repositorio, o de la plantilla ya preparada en <code>addon/locale/en/LC_MESSAGES/nvda.po</code>. Cree
+<code>addon/locale/{idioma}/LC_MESSAGES/nvda.po</code> y envíelo. No hace falta compilar nada.</p>
+<p><strong>Qué pasa después:</strong> al fusionar el archivo, un flujo de trabajo de GitHub compila el <code>.po</code>,
+genera el <code>manifest.ini</code> traducido y la documentación en HTML, lo empaqueta todo y lo publica en
+la release de recursos. Aceptar una traducción se reduce a fusionar un archivo.</p>
+<p><strong>Si usa el complemento:</strong> comprueba si hay recursos nuevos al iniciar NVDA, como mucho una vez
+al día. Puede cambiarlo o desactivarlo en <strong>Configuración &gt; Actualizaciones</strong>, y comprobarlo
+cuando quiera desde <strong>Herramientas &gt; Virtual Braille Display &gt; Buscar traducciones y
+documentación nuevas</strong>. Sólo se descargan traducciones y documentación: nunca código.</p>
+<p>La etiqueta de la release de recursos se calcula sola desde la versión del complemento: con
+<code>2026.08.30</code> es <code>recursos_2026.08</code>. El mismo cálculo lo hacen el flujo de trabajo y el
+complemento, así que no pueden desincronizarse.</p>
+<p>El detalle completo, incluido qué conviene saber al traducir, está en
+<a href="docs/traducciones.md"><code>docs/traducciones.md</code></a>.</p>
+<p><a id="desarrollo"></a></p>
+<h2>Desarrollo</h2>
+<p>El código vive en <code>addon/globalPlugins/virtualBrailleDisplay/</code>, con el driver aparte en
+<code>addon/brailleDisplayDrivers/virtualBraille.py</code>. Cada módulo tiene una responsabilidad: captura y
+almacén (<code>runtime</code>, <code>frameStore</code>, <code>contextTracker</code>, <code>originTracker</code>, <code>controllerTracker</code>),
+conversión y explicación (<code>brailleUtils</code>, <code>brailleDecoder</code>, <code>diagnostics</code>, <code>frameText</code>),
+interfaz (<code>gui</code>, <code>simpleView</code>, <code>settingsDialog</code>, <code>accessibleList</code>, <code>guiUtils</code>, <code>messages</code>) y
+apoyo (<code>config</code>, <code>models</code>, <code>logWriter</code>, <code>gestures</code>, <code>nvdaCompat</code>) y actualización de recursos
+(<code>resourceUpdates</code>, más <code>actualizadorRecursos</code> sin modificar).</p>
+<p>Compilar, y limpiar con <code>scons -c</code>:</p>
+<p><code>bash
+scons</code></p>
+<p>Pruebas, que no requieren NVDA:</p>
+<p><code>bash
+python -m pytest tests -q</code></p>
+<p>Estilo:</p>
+<p><code>bash
+python -m ruff check .</code></p>
+<p>Documentación técnica: <a href="docs/architecture.md"><code>docs/architecture.md</code></a> (flujo real y APIs de NVDA
+utilizadas), <a href="docs/origin-tracking.md"><code>docs/origin-tracking.md</code></a> (qué se sabe, qué no y dónde se
+pierde) y <a href="docs/traducciones.md"><code>docs/traducciones.md</code></a> (flujo completo de traducción) y
+<a href="docs/testing.md"><code>docs/testing.md</code></a> (pruebas automáticas y 45 casos manuales).</p>
+<p><a id="problemas"></a></p>
+<h2>Problemas frecuentes</h2>
+<table>
+<thead>
+<tr>
+<th>Síntoma</th>
+<th>Qué comprobar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No aparece ningún frame</td>
+<td>Que <strong>Virtual Braille Display</strong> esté seleccionado en las opciones de braille y que el resumen de estado diga «Línea conectada».</td>
+</tr>
+<tr>
+<td>El filtro no muestra nada</td>
+<td>Probablemente se capturó el PID del visor. Pulse <em>Quitar filtro</em> y vuelva a capturarlo con el gesto desde su aplicación.</td>
+</tr>
+<tr>
+<td>No llegan eventos externos</td>
+<td>NVDA en ejecución, <code>accessible_output2</code> detectándolo, mensajes braille activados y llamada explícita a <code>braille(text)</code>. Si NVDA registra «API interna ausente», el hook no pudo instalarse en esa versión; la captura de frames sigue funcionando.</td>
+</tr>
+<tr>
+<td>El encaminamiento o el acorde no hacen nada</td>
+<td>Requieren la línea virtual conectada.</td>
+</tr>
+<tr>
+<td>Se pierde un aviso del menú</td>
+<td>No debería: usan <code>ui.delayedMessage</code>. Si ocurre, active el cuadro de mensaje en <em>Listas y avisos</em>.</td>
+</tr>
+<tr>
+<td>NVDA no anuncia el nombre de un campo</td>
+<td>Es un defecto, no una limitación: comuníquelo.</td>
+</tr>
+</tbody>
+</table>
+<p><a id="limitaciones"></a></p>
+<h2>Limitaciones y hoja de ruta</h2>
+<ul>
+<li>La traducción inversa que se ofrece cuando NVDA no aporta texto es <strong>aproximada</strong> y siempre se
+  etiqueta como tal; nunca sustituye a las celdas.</li>
+<li>La asociación entre una solicitud externa y un frame es, como mucho, <strong>probable</strong>.</li>
+<li>El PID de contexto identifica la aplicación cuyo contenido se representaba, no necesariamente
+  la que pidió el mensaje.</li>
+<li>El hook de Controller Client usa una API interna de NVDA. Si cambia, sólo se desactiva el
+  historial de eventos externos.</li>
+<li>No hay dispositivo HID virtual: la línea existe dentro de NVDA.</li>
+</ul>
+<p>Pendiente: protocolo cooperativo por IPC local para que una aplicación declare su PID y un
+identificador de correlación antes de llamar al Controller Client, convirtiendo la atribución en
+confirmada; un módulo auxiliar <code>virtual_braille_debug</code>; e investigación de un dispositivo HID
+Braille virtual para Windows.</p>
+</body>
+</html>

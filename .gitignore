@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Compilación del complemento
+*.nvda-addon
+.sconsign.dblite
+# El .pot de la raíz sí se publica: es la plantilla de los traductores.
+virtualBrailleDisplay-merge.pot
+
+# Estado local del actualizador de recursos
+recursos_estado.json
+
+# Herramientas
+.ruff_cache/
+.pytest_cache/
+.vscode/
+.idea/
+
+# Sistema operativo
+Thumbs.db
+.DS_Store

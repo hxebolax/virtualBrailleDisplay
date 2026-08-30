@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="../style.css" media="screen">
+<title>Virtual Braille Display 2026.08.30</title>
+</head>
+<body>
+<h1>Traducciones y actualización de recursos</h1>
+<p>El complemento está escrito en español. Las traducciones a otros idiomas y la documentación se
+publican <strong>aparte del complemento</strong>, en una release de recursos, de modo que llegan al usuario
+sin tener que instalar una versión nueva.</p>
+<hr />
+<h2>Para quien traduce</h2>
+<h3>1. Obtener la plantilla</h3>
+<p>En la raíz del repositorio está <code>virtualBrailleDisplay.pot</code>, generado con:</p>
+<p><code>bash
+scons pot</code></p>
+<p>Contiene todas las cadenas traducibles del complemento, con la referencia al archivo y la línea
+en que aparece cada una.</p>
+<h3>2. Crear el archivo del idioma</h3>
+<p>Cree <code>addon/locale/{idioma}/LC_MESSAGES/nvda.po</code> a partir de la plantilla. El código de idioma
+es el que usa NVDA: <code>en</code>, <code>fr</code>, <code>de</code>, <code>pt_BR</code>, <code>zh_TW</code>…</p>
+<p>Como punto de partida hay una plantilla ya preparada en
+<code>addon/locale/en/LC_MESSAGES/nvda.po</code>, con la cabecera rellena y todas las cadenas sin traducir.</p>
+<p>Puede editarla con Poedit, con Lokalize o con cualquier editor de texto.</p>
+<h3>3. Comprobar y enviar</h3>
+<p>Antes de enviar, compruebe que el archivo es válido:</p>
+<p><code>bash
+msgfmt --check -o NUL addon/locale/es/LC_MESSAGES/nvda.po</code></p>
+<p>Envíelo como <em>pull request</em> o hágalo llegar al autor. <strong>No hace falta enviar el <code>.mo</code>
+compilado</strong>: lo genera el flujo de trabajo automáticamente.</p>
+<h3>Qué conviene saber al traducir</h3>
+<ul>
+<li>Los marcadores entre llaves, como <code>{frameId}</code> o <code>{count}</code>, deben conservarse tal cual.</li>
+<li>El carácter <code>&amp;</code> marca la tecla de acceso rápido de un botón o de un elemento de menú. Colóquelo
+  delante de una letra que no choque con las demás de ese mismo diálogo.</li>
+<li>Las cadenas con <code>ngettext</code> tienen forma singular y plural; complete ambas.</li>
+<li>Los saltos de línea <code>\n</code> de los textos explicativos mantienen la anchura de los párrafos en los
+  diálogos: consérvelos donde tengan sentido en su idioma.</li>
+<li>El texto de <code>buildVars.py</code> (resumen, descripción y registro de cambios) también se traduce y
+  aparece en el Almacén de complementos de NVDA.</li>
+</ul>
+<hr />
+<h2>Qué ocurre al enviar una traducción</h2>
+<p>Al llegar el archivo a la rama principal, el flujo de trabajo
+<code>.github/workflows/compilar_idiomas.yml</code> se ejecuta solo y hace lo siguiente:</p>
+<ol>
+<li>Compila cada <code>.po</code> a <code>.mo</code> con <code>msgfmt</code>.</li>
+<li>Genera un <code>manifest.ini</code> traducido por idioma, usando <code>manifest-translated.ini.tpl</code> y las
+   cadenas de <code>buildVars.py</code>.</li>
+<li>Copia el <code>README.md</code> de la raíz a <code>addon/doc/es/readme.md</code>.</li>
+<li>Convierte a HTML todos los <code>.md</code> de <code>addon/doc/{idioma}/</code>, con el título traducido, el idioma
+   correcto y la hoja de estilos.</li>
+<li>Copia <code>style.css</code> a <code>addon/doc/</code>.</li>
+<li>Calcula un hash combinado de todos los recursos y lo guarda en <code>addon/recursos_info.json</code>.</li>
+<li>Empaqueta todo en <code>virtualBrailleDisplay_recursos.zip</code>.</li>
+<li>Publica ese ZIP en una release marcada como <em>prerelease</em>, con la etiqueta de recursos.</li>
+<li>Vuelve a subir al repositorio los archivos compilados.</li>
+</ol>
+<p>Todo el proceso es automático. Para el mantenedor, aceptar una traducción se reduce a fusionar el
+archivo <code>.po</code>.</p>
+<hr />
+<h2>La etiqueta de recursos</h2>
+<p>La etiqueta se calcula <strong>automáticamente</strong> a partir de <code>addon_version</code>, tomando sus dos primeros
+componentes numéricos:</p>
+<table>
+<thead>
+<tr>
+<th>Versión del complemento</th>
+<th>Etiqueta de recursos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>2026.08.30</code></td>
+<td><code>recursos_2026.08</code></td>
+</tr>
+<tr>
+<td><code>2026.09.15</code></td>
+<td><code>recursos_2026.09</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ese mismo cálculo lo hacen el flujo de trabajo y el complemento en tiempo de ejecución, de modo
+que no hay que configurar la etiqueta en dos sitios ni pueden desincronizarse.</p>
+<p>La consecuencia práctica es útil: el tercer número queda libre para correcciones que no cambian
+textos ni documentación. Puede publicar <code>2026.08.31</code> sin generar una release de recursos nueva, y
+los usuarios seguirán recibiendo los recursos de <code>recursos_2026.08</code>.</p>
+<p>Si algún día quisiera fijar una etiqueta manualmente, tendría que definirla <strong>a la vez</strong> en
+<code>TAG_RELEASE</code> del flujo de trabajo y en el parámetro <code>tag_release</code> del constructor de
+<code>ActualizadorRecursos</code>. Si no coinciden, la API de GitHub devuelve 404 y el complemento deja de
+buscar recursos en silencio. Por eso se usa el modo automático.</p>
+<hr />
+<h2>Para quien usa el complemento</h2>
+<p>El complemento comprueba si hay recursos nuevos al iniciar NVDA, como mucho una vez cada 24
+horas. Ambas cosas se pueden cambiar en <strong>Configuración &gt; Actualizaciones</strong>, y la comprobación
+automática se puede desactivar.</p>
+<p>En cualquier momento se puede comprobar manualmente desde <strong>Herramientas &gt; Virtual Braille
+Display &gt; Buscar traducciones y documentación nuevas</strong>, o con el gesto <em>Busca traducciones y
+documentación nuevas del complemento</em>.</p>
+<p>Sólo se descargan traducciones y documentación: <strong>nunca código</strong>. Cuando se instala algo nuevo, el
+complemento lo dice y recuerda que conviene reiniciar NVDA para aplicarlo por completo. Si no hay
+nada nuevo, la comprobación automática no dice nada.</p>
+<hr />
+<h2>Compilación local</h2>
+<p>Para compilar los recursos sin esperar al flujo de trabajo:</p>
+<p><code>bash
+python scons_idiomas.py</code></p>
+<p>Opciones útiles: <code>--solo-idiomas</code>, <code>--solo-docs</code>, <code>--sin-manifest</code> y <code>--sin-html</code>.</p>
+<p>El complemento completo se compila con <code>scons</code>, que también genera los <code>.mo</code> y la documentación
+HTML dentro del <code>.nvda-addon</code>.</p>
+<hr />
+<h2>Archivos implicados</h2>
+<table>
+<thead>
+<tr>
+<th>Archivo</th>
+<th>Papel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>virtualBrailleDisplay.pot</code></td>
+<td>Plantilla con todas las cadenas traducibles.</td>
+</tr>
+<tr>
+<td><code>addon/locale/{idioma}/LC_MESSAGES/nvda.po</code></td>
+<td>Traducción de un idioma. Es lo único que envía un traductor.</td>
+</tr>
+<tr>
+<td><code>addon/locale/{idioma}/LC_MESSAGES/nvda.mo</code></td>
+<td>Compilado; lo genera el flujo de trabajo.</td>
+</tr>
+<tr>
+<td><code>addon/locale/{idioma}/manifest.ini</code></td>
+<td>Resumen y descripción traducidos; lo genera el flujo de trabajo.</td>
+</tr>
+<tr>
+<td><code>addon/doc/{idioma}/*.md</code> y <code>*.html</code></td>
+<td>Documentación por idioma.</td>
+</tr>
+<tr>
+<td><code>manifest-translated.ini.tpl</code></td>
+<td>Plantilla del manifest traducido.</td>
+</tr>
+<tr>
+<td><code>scons_idiomas.py</code></td>
+<td>Compilación local equivalente a la del flujo de trabajo.</td>
+</tr>
+<tr>
+<td><code>addon/globalPlugins/virtualBrailleDisplay/actualizadorRecursos.py</code></td>
+<td>Módulo que descarga e instala los recursos.</td>
+</tr>
+<tr>
+<td><code>addon/globalPlugins/virtualBrailleDisplay/resourceUpdates.py</code></td>
+<td>Integración del módulo anterior con este complemento.</td>
+</tr>
+</tbody>
+</table>
+<p><code>actualizadorRecursos.py</code> y <code>scons_idiomas.py</code> proceden de
+<a href="https://github.com/hxebolax/Actualizador-Recursos-NVDA">Actualizador-Recursos-NVDA</a> y se
+mantienen <strong>sin modificar</strong>, para poder actualizarlos sobrescribiéndolos. Por eso están excluidos
+de las comprobaciones de estilo en <code>pyproject.toml</code>.</p>
+</body>
+</html>

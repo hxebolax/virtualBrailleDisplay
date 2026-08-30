@@ -1,0 +1,1443 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the 'virtualBrailleDisplay' package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 'virtualBrailleDisplay' '2026.08.30'\n"
+"Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
+"POT-Creation-Date: 2026-08-30 11:29+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: addon\brailleDisplayDrivers\virtualBraille.py:18
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:161
+#: addon\globalPlugins\virtualBrailleDisplay\messages.py:73
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:21 buildVars.py:9
+msgid "Virtual Braille Display"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\accessibleList.py:154
+msgid "Última columna."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\accessibleList.py:154
+msgid "Primera columna."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\accessibleList.py:164
+#, python-brace-format
+msgid "Sólo hay {count} columnas."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\accessibleList.py:176
+msgid "La celda está vacía; no se ha copiado nada."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\accessibleList.py:179
+msgid "Celda copiada al portapapeles."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\accessibleList.py:188
+#, python-brace-format
+msgid "Fila {row} de {total}"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\accessibleList.py:191
+#, python-brace-format
+msgid "Fila {row}"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\accessibleList.py:199
+msgid "vacío"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:48
+msgid "Información"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:49
+msgid "Sugerencia"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:50
+msgid "Aviso"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:57
+msgid "Origen desconocido"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:58
+msgid "Navegación normal de NVDA"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:59
+msgid "NVDA Controller Client"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:60
+msgid "Mensaje braille de NVDA"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:61
+msgid "Mensaje de aplicación externa correlacionado"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:68
+msgid "Sin determinar"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:69
+msgid "Sólo contexto; no atribuido"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:70
+msgid "Probable, no confirmado"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:71
+msgid "Confirmado"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:78
+msgid "No determinado"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:79
+msgid "Búfer principal: contenido del foco o de la revisión"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:80
+msgid "Búfer de mensajes: aviso temporal mostrado por NVDA"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:87
+msgid "sin celda"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:89
+msgid "ninguno; celda vacía"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:90
+#, python-brace-format
+msgid "{pattern}, puntos {dots}, valor hexadecimal 0x{value:02X}"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:102
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:556
+#, python-brace-format
+msgid "{name} (PID {pid})"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:106
+#, python-brace-format
+msgid "PID {pid}"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:107
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:697
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:698
+msgid "No disponible"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:113
+msgid "La línea no declaró ninguna celda."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:116
+#, python-brace-format
+msgid "Ocupa {used} de {total} celdas ({percentage} por ciento de la línea)."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:126
+msgid "Qué está viendo ahora mismo una persona con línea braille:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:128
+#, python-brace-format
+msgid "Texto: {text}"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:129
+#, python-brace-format
+msgid "De dónde sale ese texto: {source}."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:130
+#, python-brace-format
+msgid "Aplicación cuyo contenido se estaba representando: {application}."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:133
+#, python-brace-format
+msgid "Parte de NVDA que lo generó: {buffer}."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:149
+msgid "Sin incidencias detectadas"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:150
+msgid ""
+"El frame contiene texto, cabe en la línea y su origen está identificado."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:163
+msgid "La línea braille se quedó en blanco"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:165
+msgid ""
+"NVDA envió una línea sin ningún punto activo. Quien use braille no percibe "
+"nada. Suele ocurrir cuando un control no tiene nombre accesible, cuando el "
+"foco cayó en un contenedor vacío o cuando la ventana no expone texto."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:176
+msgid "Hay puntos pero no se pudo recuperar el texto"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:178
+msgid ""
+"Las celdas contienen información, pero NVDA no facilitó el texto asociado y "
+"la traducción inversa no dio resultado. Compruebe la tabla braille activa."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:196
+msgid "El contenido llena la línea completa"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:198
+#, python-brace-format
+msgid ""
+"Se han ocupado las {total} celdas disponibles. Es muy probable que el texto "
+"continúe y que la persona tenga que desplazar la línea para leer el resto. "
+"Considere acortar la información más importante o situarla al principio."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:208
+msgid "El contenido casi llena la línea"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:210
+msgid ""
+"Quedan pocas celdas libres. En una línea más corta, como las de 14 o 20 "
+"celdas, este mismo contenido ya no cabría de una vez."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:220
+msgid "En una línea de 20 celdas ocuparía varias ventanas"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:222
+#, python-brace-format
+msgid ""
+"El mismo contenido necesitaría {count} desplazamientos en una línea de 20 "
+"celdas."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:236
+msgid "Procede de una solicitud de una aplicación externa"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:238
+msgid ""
+"Una aplicación pidió a NVDA mostrar un mensaje braille y este frame se le "
+"atribuyó por proximidad temporal y coincidencia de texto. La atribución es "
+"probable, nunca confirmada."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:248
+msgid "No se pudo determinar el origen"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:250
+msgid ""
+"NVDA no facilitó contexto suficiente para este frame. Las celdas siguen "
+"siendo exactas: lo único desconocido es qué parte de NVDA las produjo."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:259
+msgid "Sin aplicación identificada"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:261
+msgid ""
+"Ni las regiones braille ni una solicitud externa aportaron un proceso. El "
+"complemento no deduce la aplicación a partir del foco porque el foco no "
+"tiene por qué coincidir con quien pidió el mensaje."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\diagnostics.py:272
+msgid "Revisión automática:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\frameText.py:16
+msgid "Texto exacto asociado por NVDA a esta ventana braille"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\frameText.py:18
+msgid "Texto solicitado por una aplicación; asociación probable"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\frameText.py:20
+msgid "Traducción inversa aproximada con la tabla braille activa"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\frameText.py:22
+msgid "No hay texto legible disponible para este frame."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\frameText.py:23
+msgid ""
+"No disponible; consulte las celdas técnicas si necesita el patrón exacto"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\frameText.py:29
+msgid "Sin texto legible"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:53
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:68
+msgid "ID"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:54
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:69
+msgid "Hora"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:55
+msgid "Origen"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:56
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:75
+msgid "Confianza"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:57
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:73
+msgid "Aplicación"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:58
+msgid "Celdas"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:59
+msgid "Texto legible"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:60
+msgid "Unicode"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:61
+msgid "Hex"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:70
+msgid "API"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:71
+msgid "Texto solicitado"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:72
+msgid "PID"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:74
+msgid "Frame"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:84
+#, python-brace-format
+msgid "#{frameId} — {time} — {text}"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:97
+#, python-brace-format
+msgid "Comparación del frame #{old} con el frame #{new}"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:103
+#, python-brace-format
+msgid "Resumen: {count} celda es diferente."
+msgid_plural "Resumen: {count} celdas son diferentes."
+msgstr[0] ""
+msgstr[1] ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:107
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:112
+#, python-brace-format
+msgid "Texto legible del frame #{frameId} ({source}): {text}"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:118
+msgid "Detalle de las celdas:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:121
+msgid "No cambió ninguna celda."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:126
+#, python-brace-format
+msgid "Celda {position}: se añadió {new}."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:133
+#, python-brace-format
+msgid "Celda {position}: se eliminó {old}."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:140
+#, python-brace-format
+msgid "Celda {position}: cambió de {old} a {new}."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:198
+msgid "Resumen de &estado:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:199
+msgid "Secciones del visor"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:215
+msgid "&Conectar"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:216
+msgid "&Desconectar"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:217
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:866
+msgid "&Pausar actualizaciones"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:218
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:878
+msgid "&Fijar frame mostrado"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:219
+msgid "&Actualizar ahora"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:220
+msgid "Filtrar por aplicación en&focada"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:221
+msgid "&Quitar filtro"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:222
+msgid "&Vista sencilla"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:223
+msgid "Co&piar"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:224
+msgid "&Guardar…"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:225
+msgid "&Limpiar"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:226
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:99
+msgid "Con&figuración…"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:227
+#: addon\globalPlugins\virtualBrailleDisplay\simpleView.py:93
+msgid "Ce&rrar"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:236
+msgid ""
+"Detiene o reanuda las actualizaciones automáticas de los controles; la "
+"captura continúa."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:239
+msgid "Fija el frame mostrado o vuelve a seguir el frame más reciente."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:242
+msgid ""
+"Limita el visor a los frames de la aplicación que tenía el foco antes de "
+"abrirlo."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:245
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:827
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:878
+msgid "&Volver al frame más reciente"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:254
+msgid "Resumen del &frame:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:255
+msgid "&Origen del frame:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:256
+msgid "&Confianza del origen:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:257
+msgid "Parte de NVDA que lo &generó:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:261
+msgid "Aplicación cuyo contenido se re&presentaba:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:264
+msgid "Aplicación &solicitante:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:265
+msgid "&PID solicitante:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:269
+msgid "Texto &legible para el desarrollador:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:276
+msgid "Procedencia y fia&bilidad del texto legible:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:279
+msgid "Texto solicita&do:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:281
+msgid "Resumen amigable"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:293
+msgid ""
+"Estos campos son la representación exacta recibida por la línea.\n"
+"No necesita entenderlos para usar el resumen amigable."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:297
+msgid "&Unicode Braille:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:298
+msgid "&Hexadecimal:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:299
+msgid "&Decimal:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:300
+msgid "&Binario:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:302
+msgid "&Puntos braille:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:307
+msgid "Reparto por &filas de la línea:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:312
+msgid "Datos técnicos exactos"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:320
+msgid "Filtrar por &texto:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:325
+msgid "Aplicar &filtro de texto"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:328
+msgid "Mostrar sólo la a&plicación:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:330
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:554
+msgid "Todas las aplicaciones"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:337
+msgid ""
+"Frames capturados. Seleccione una fila para fijarla y examinar sus detalles."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:342
+msgid "Lista de frames capturados"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:344
+msgid ""
+"Cada fila contiene identificador, hora, origen, confianza, aplicación, "
+"celdas y texto. Recorra las columnas con las flechas izquierda y derecha o "
+"con Ctrl más un número del 1 al 9."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:352
+msgid "Historial de frames"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:362
+msgid ""
+"Solicitudes de braille recibidas desde aplicaciones mediante Controller "
+"Client."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:367
+msgid "Lista de solicitudes braille de aplicaciones externas"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:369
+msgid ""
+"Cada fila muestra API, texto solicitado, PID, aplicación y frame "
+"correlacionado."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:374
+msgid "Eventos externos"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:382
+msgid "Frame &A:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:387
+msgid "Frame &B:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:392
+msgid "&Comparar A con B"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:393
+msgid "Comparar los dos ú&ltimos"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:394
+msgid "Comparar antepe&núltimo con último"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:395
+msgid "Usar el frame &mostrado como B"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:404
+msgid "Explicación amigable de los cam&bios:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:409
+msgid "Comparación"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:420
+msgid ""
+"El mismo contenido, repartido tal y como lo mostraría una línea de otro "
+"tamaño.\n"
+"No se vuelve a traducir nada: sólo se agrupan de otro modo las celdas "
+"capturadas."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:425
+msgid "Tamaño de la línea &simulada:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:434
+msgid "Ven&tanas resultantes:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:440
+msgid "Simulación de tamaño"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:451
+msgid ""
+"Estas acciones se entregan a NVDA como gestos reales de línea braille, igual "
+"que\n"
+"si procedieran de un dispositivo físico. Requieren la línea virtual "
+"conectada."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:456
+msgid "Celda de en&caminamiento:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:463
+msgid "Simular tecla de en&caminamiento"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:464
+msgid "Desplazar &atrás"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:465
+msgid "Desplazar a&delante"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:470
+msgid "Acorde del teclado braille simulado:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:474
+#, python-brace-format
+msgid "Punto {dot}"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:477
+msgid "Espacio"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:480
+msgid "&Enviar acorde a NVDA"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:482
+msgid "Resultado de la ú&ltima acción:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:484
+msgid "Interacción con la línea"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:556
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:593
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:328
+msgid "aplicación sin nombre"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:583
+msgid "actualizaciones automáticas pausadas; la captura continúa"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:585
+msgid "frame fijado; los historiales continúan"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:587
+msgid "modo de inspección; use Actualizar ahora para cargar una instantánea"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:589
+msgid "siguiendo automáticamente el frame más reciente"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:592
+#, python-brace-format
+msgid "Filtro: sólo {name} con PID {pid}."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:597
+msgid "Filtro: todas las aplicaciones."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:601
+#, python-brace-format
+msgid ""
+"Línea {connection}. {cells} celdas por fila y {rows} filas. Visor: {mode}.\n"
+"{filter} {frames} frames y {events} eventos conservados."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:604
+msgid "conectada"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:604
+msgid "desconectada"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:646
+#, python-brace-format
+msgid "{used} de {total}"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:737
+#, python-brace-format
+msgid "Frame #{frameId}. Capturado a las {timestamp}. {occupancy}"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:748
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:753
+msgid "No disponible mediante la API actual"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:758
+msgid "No hubo solicitud externa correlacionada."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:774
+msgid "Línea de una sola fila."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:778
+#, python-brace-format
+msgid "Fila {index}: {pattern}"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:789
+msgid "No hay un frame mostrado."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:795
+msgid "El frame está vacío: no hay nada que repartir."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:800
+#, python-brace-format
+msgid "Con {size} celdas harían falta {count} ventana."
+msgid_plural "Con {size} celdas harían falta {count} ventanas."
+msgstr[0] ""
+msgstr[1] ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:810
+#, python-brace-format
+msgid "Ventana {index}: {pattern}   [{hex}]"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:838
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:246
+msgid "Línea braille virtual conectada."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:842
+msgid "NVDA no pudo conectar Virtual Braille Display."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:843
+msgid "Error de conexión"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:851
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:256
+msgid "Línea braille virtual desconectada; se conservan los historiales."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:855
+msgid "NVDA no pudo desconectar la línea virtual."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:856
+msgid "Error de desconexión"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:866
+msgid "&Reanudar actualizaciones"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:897
+msgid ""
+"NVDA no pudo determinar la aplicación enfocada. Recuerde que, con el visor "
+"abierto, la aplicación enfocada es el propio visor: use el gesto de teclado "
+"desde su aplicación para capturar su PID."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:901
+msgid "Sin aplicación enfocada"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:931
+msgid "Informe del frame copiado al portapapeles."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:938
+msgid ""
+"Los historiales pueden contener contraseñas, documentos, notificaciones y "
+"otros datos privados. No se guarda nada automáticamente. ¿Desea exportarlos "
+"ahora?"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:941
+msgid "Advertencia de privacidad"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:946
+msgid "Texto (*.txt)|*.txt|JSON (*.json)|*.json|JSON Lines (*.jsonl)|*.jsonl"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:949
+msgid "Guardar historial"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:969
+msgid "Error al guardar"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:975
+msgid "¿Desea limpiar los historiales de frames y eventos externos?"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:976
+msgid "Limpiar historiales"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:1036
+msgid "El frame mostrado no está en la lista de comparación."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:1039
+msgid "Frame mostrado seleccionado como B."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:1046
+msgid "No hay suficientes frames conservados para esa comparación."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:1054
+msgid "Elija los dos frames que desea comparar."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:1059
+msgid "Alguno de los frames ya no está en el historial."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:1072
+#, python-brace-format
+msgid "Se envió el encaminamiento a la celda {cell}."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:1076
+msgid ""
+"NVDA no aceptó el encaminamiento. Compruebe que la línea virtual está "
+"conectada."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:1087
+msgid "Marque al menos un punto o la barra espaciadora."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:1091
+#, python-brace-format
+msgid "Se envió el acorde con valor de puntos {dots}."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\gui.py:1095
+msgid ""
+"NVDA no aceptó el acorde. Compruebe que la línea virtual está conectada."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\resourceUpdates.py:84
+msgid "La actualización de recursos no está disponible."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\resourceUpdates.py:87
+msgid "Comprobando traducciones y documentación nuevas…"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\resourceUpdates.py:93
+msgid "No se pudo comprobar si hay recursos nuevos."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\resourceUpdates.py:111
+msgid "No se pudieron comprobar los recursos. Inténtelo más tarde."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\resourceUpdates.py:116
+#, python-brace-format
+msgid ""
+"Se han instalado recursos nuevos: {count} archivos. Reinicie NVDA para "
+"aplicarlos por completo."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\resourceUpdates.py:122
+msgid "Las traducciones y la documentación ya están al día."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:46
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:48
+msgid "Configuración de Virtual Braille Display"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:52
+msgid "Secciones de configuración"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:74
+msgid "Personalizado"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:76
+msgid "&Celdas por fila:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:86
+msgid "Celdas &personalizadas, de 1 a 256:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:93
+msgid "&Filas de la línea, de 1 a 40:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:103
+msgid ""
+"Con más de una fila se simula una línea multilínea. Al cambiar la "
+"geometría,\n"
+"NVDA reinicializa el driver y vuelve a calcular realmente la salida braille."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:109
+msgid "Línea braille"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:119
+msgid "Frames y eventos &conservados:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:126
+msgid "No guardar los frames &vacíos, sin ningún punto activo"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:130
+msgid "No guardar frames &repetidos idénticos al anterior"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:134
+msgid "&Seguir automáticamente el frame más reciente al abrir el visor"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:138
+msgid "Abrir primero la vista &explicada en lenguaje humano"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:144
+msgid ""
+"Al abrir el visor con un gesto, filtrar por la &aplicación que tenga el foco"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:149
+msgid "Captura e historial"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:157
+msgid "Ventana de &correlación, en milisegundos:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:164
+msgid "Ventana sólo &temporal, en milisegundos:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:174
+msgid ""
+"La primera ventana limita cuánto tiempo puede pasar entre la solicitud de "
+"una\n"
+"aplicación y el frame que se le atribuye. La segunda sólo se usa cuando no "
+"hay\n"
+"coincidencia de texto y únicamente si hay un candidato. La correlación nunca "
+"se\n"
+"presenta como confirmada."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:182
+msgid "Correlación de orígenes"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:193
+msgid ""
+"En las listas del visor puede recorrer las columnas de la fila enfocada con "
+"las\n"
+"flechas izquierda y derecha, o saltar a una columna con Ctrl más un número "
+"del 1\n"
+"al 9. Elija qué desea escuchar de cada celda:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:202
+msgid "Decir el número de &fila"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:208
+msgid "Decir también el &total de filas"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:214
+msgid "Decir el nombre de la &columna"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:220
+msgid "Decir el &contenido de la celda"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:226
+msgid "Avisar cuando la celda está &vacía"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:232
+msgid "Dar la vuelta al llegar a la &última columna"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:238
+msgid "Anunciar sólo por vo&z, sin ocupar la línea braille"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:245
+msgid ""
+"Si desactiva todas las opciones se seguirá diciendo el contenido de la "
+"celda.\n"
+"Con Ctrl+Mayús+C se copia la celda enfocada al portapapeles."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:251
+msgid "Avisos con el &resultado de una acción:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:254
+msgid "Leerlos por voz y braille"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:255
+msgid "Mostrarlos en un cuadro de mensaje"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:256
+msgid "Las dos cosas"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:267
+msgid ""
+"Los avisos lanzados desde el menú se retrasan hasta que NVDA termina de "
+"anunciar\n"
+"la ventana que recupera el foco, para que no se pierdan. Si aun así prefiere "
+"no\n"
+"depender de la voz, elija el cuadro de mensaje."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:274
+msgid "Listas y avisos"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:285
+msgid ""
+"Las traducciones y la documentación se publican en una release aparte del\n"
+"repositorio, de modo que llegan sin tener que instalar una versión nueva "
+"del\n"
+"complemento. Sólo se descargan esos recursos: nunca código."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:292
+msgid "&Comprobar automáticamente al iniciar NVDA"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:296
+msgid "&Horas entre comprobaciones:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:306
+msgid ""
+"Los cambios se aplican al reiniciar NVDA. Puede comprobarlo cuando quiera "
+"desde\n"
+"Herramientas, Virtual Braille Display, Buscar traducciones y documentación "
+"nuevas."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:312
+msgid "Actualizaciones"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:323
+msgid ""
+"Aviso de privacidad: el braille que recibe la línea puede contener "
+"contraseñas,\n"
+"documentos, mensajes y notificaciones. El registro continuo escribe todo eso "
+"en\n"
+"un archivo sin cifrar. Actívelo sólo mientras depure y desactívelo después."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:330
+msgid "&Registrar continuamente frames y eventos en un archivo"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:334
+msgid "&Formato del registro:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:336
+msgid "JSON Lines (recomendado)"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:336
+msgid "Texto"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:343
+msgid "&Archivo de destino:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:347
+msgid "&Examinar…"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:350
+msgid "Registro y privacidad"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:366
+msgid "JSON Lines (*.jsonl)|*.jsonl|Texto (*.txt)|*.txt"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:369
+msgid "Archivo de registro continuo"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:426
+msgid "NVDA no pudo reinicializar el driver con la nueva geometría."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:428
+msgid "Error de configuración"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\settingsDialog.py:459
+#, python-brace-format
+msgid "La carpeta del archivo de registro no existe: {folder}"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\simpleView.py:31
+msgid "Tipo"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\simpleView.py:32
+msgid "Asunto"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\simpleView.py:33
+msgid "Explicación"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\simpleView.py:49
+msgid "Virtual Braille Display: explicación sencilla"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\simpleView.py:74
+msgid "Qué está pasando &ahora mismo:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\simpleView.py:78
+msgid "&Revisión automática:"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\simpleView.py:82
+msgid "Revisión automática de la salida braille"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\simpleView.py:84
+msgid ""
+"Cada fila describe algo que conviene comprobar. Recorra las columnas con las "
+"flechas izquierda y derecha o con Ctrl más un número."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\simpleView.py:90
+msgid "&Actualizar"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\simpleView.py:91
+msgid "&Copiar informe"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\simpleView.py:92
+msgid "Ver &detalles técnicos"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\simpleView.py:108
+msgid ""
+"Todavía no ha llegado ningún frame.\n"
+"\n"
+"Compruebe que Virtual Braille Display está seleccionado en las opciones de "
+"braille de NVDA y utilice la aplicación que quiere revisar."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:55
+msgid "&Visor de frames y eventos…"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:56
+msgid "Abre el visor técnico con los historiales de la línea braille virtual."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:60
+msgid "Explicación &sencilla…"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:61
+msgid ""
+"Explica en lenguaje llano qué está recibiendo ahora mismo la línea braille."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:66
+msgid "&Conectar la línea virtual"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:67
+msgid "Selecciona Virtual Braille Display como pantalla braille de NVDA."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:71
+msgid "&Desconectar la línea virtual"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:72
+msgid "Selecciona «sin braille» conservando los historiales capturados."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:77
+msgid "&Filtrar por la aplicación que tenía el foco"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:78
+msgid ""
+"Limita el visor a los frames de la aplicación desde la que abrió este menú."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:82
+msgid "&Quitar el filtro de aplicación"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:83
+msgid "Vuelve a mostrar los frames de todas las aplicaciones."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:87
+msgid "Anunciar el último &frame"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:88
+msgid "Dice el texto y la ocupación del último frame recibido."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:93
+msgid "&Buscar traducciones y documentación nuevas"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:94
+msgid ""
+"Descarga las traducciones y la documentación publicadas desde la última "
+"versión."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:100
+msgid "Abre la configuración con pestañas del complemento."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:104
+msgid "&Ayuda del complemento"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:105
+msgid "Abre la documentación instalada con el complemento."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:110
+msgid "&Virtual Braille Display"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:111
+msgid ""
+"Línea braille virtual para inspeccionar y depurar la salida braille de NVDA."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:149
+msgid "Abre el visor de Virtual Braille Display"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:164
+msgid "Abre el visor filtrado por la aplicación que tiene el foco"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:178
+msgid "Activa o desactiva el filtro por la aplicación que tiene el foco"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:186
+msgid "Abre la explicación sencilla de la salida braille"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:194
+msgid "Anuncia el último frame recibido por la línea virtual"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:202
+msgid "Busca traducciones y documentación nuevas del complemento"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:219
+msgid "Todavía no se ha capturado ningún frame braille."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:223
+#, python-brace-format
+msgid "Frame {frameId}. {text}. {occupancy}"
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:237
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:361
+msgid "Filtro por aplicación desactivado."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:248
+msgid "NVDA no pudo conectar la línea braille virtual."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:260
+msgid "NVDA no pudo desconectar la línea braille virtual."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:284
+msgid "No se encontró la documentación del complemento."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:320
+msgid "No se pudo determinar la aplicación que tiene el foco."
+msgstr ""
+
+#: addon\globalPlugins\virtualBrailleDisplay\__init__.py:327
+#, python-brace-format
+msgid "Filtrando por {name}, con PID {pid}."
+msgstr ""
+
+#: buildVars.py:11
+msgid ""
+"Línea braille virtual para inspeccionar y depurar la salida braille de "
+"NVDA,\n"
+"incluidos mensajes enviados por aplicaciones externas mediante NVDA "
+"Controller\n"
+"Client y bibliotecas como accessible-output2."
+msgstr ""
+
+#: buildVars.py:17
+msgid ""
+"Añade filtro por aplicación, contexto real de origen, listas con navegación "
+"por\n"
+"columnas, configuración con pestañas, explicación en lenguaje humano, "
+"comparación\n"
+"libre de frames, simulación de otros tamaños, encaminamiento y entrada "
+"braille\n"
+"simulados y registro continuo opcional."
+msgstr ""

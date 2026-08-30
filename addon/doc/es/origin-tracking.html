@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="../style.css" media="screen">
+<title>Virtual Braille Display 2026.08.30</title>
+</head>
+<body>
+<h1>Seguimiento del origen</h1>
+<h2>Qué se conoce con certeza</h2>
+<p>El hook se instala en el puntero de función que <code>NVDAHelper.initialize</code> asigna a <code>_nvdaController_brailleMessage</code>. Cuando entra en el wrapper, se sabe de forma confirmada que hubo una llamada a la API Controller Client y se conoce su argumento de texto.</p>
+<p>Ese registro es un <code>ExternalBrailleEvent</code> independiente. Su confianza <code>CONFIRMED</code> sólo confirma <strong>la existencia de la solicitud</strong>, no que un frame posterior proceda de ella.</p>
+<h2>Cómo se obtiene la identidad del cliente</h2>
+<p>La interfaz RPC actual declara:</p>
+<p><code>c
+error_status_t __stdcall brailleMessage([in,string] const wchar_t* message);</code></p>
+<p>El callback Python correspondiente declara:</p>
+<p><code>python
+@WINFUNCTYPE(c_long, c_wchar_p)
+def nvdaController_brailleMessage(text):
+    ...</code></p>
+<p>No hay parámetro de PID, ejecutable ni ID de correlación en la firma. La función <code>nvdaController_getProcessId</code> de la API cliente obtiene el PID de <strong>NVDA</strong>, no el proceso llamante.</p>
+<p>Sin embargo, el wrapper se ejecuta todavía en el hilo que atiende la llamada RPC. En ese punto transitorio consulta <code>winBindings.rpcrt4.I_RpcBindingInqLocalClientPID(None, ...)</code>, la misma vinculación presente en NVDA, y obtiene el PID del cliente local. Después resuelve el nombre con <code>appModuleHandler.getAppNameFromProcessID(pid, includeExt=True)</code>. Ambos datos se guardan en el evento antes de delegar al callback original.</p>
+<p>El PID se considera confirmado cuando RPC devuelve éxito. El ejecutable es el nombre resuelto por NVDA para ese PID. Si la consulta RPC falla, devuelve un PID no válido o el proceso ya no puede resolverse, los campos correspondientes quedan vacíos: el complemento nunca los deduce del foco ni inventa una identidad.</p>
+<p>La identidad sólo existe en el <code>ExternalBrailleEvent</code>. Después, el núcleo encola únicamente <code>braille.handler.message</code> y <code>text</code>; <code>TextRegion</code>, <code>BrailleBuffer</code> y <code>display(cells)</code> no reciben el PID ni un ID de correlación. Por eso la identidad del evento es confirmada, pero su asociación con un frame posterior sigue siendo probable.</p>
+<p>El proceso enfocado no se usa como sustituto. NVDA consulta el foco para respetar el modo de reposo, pero eso no demuestra qué proceso hizo la llamada RPC.</p>
+<h2>Cómo se correlaciona</h2>
+<ol>
+<li>El hook registra el evento externo con tiempo monotónico.</li>
+<li>El callback original encola <code>BrailleHandler.message(text)</code>.</li>
+<li><code>pre_writeCells</code> aporta <code>rawText</code> y las celdas previas a la normalización del driver. Se encuentra en <code>braille</code> en NVDA 2026.1 y en <code>braille.extensions</code> en NVDA 2026.3.</li>
+<li>El correlador busca eventos no asociados dentro de una ventana limitada.</li>
+<li>Prefiere coincidencia textual exacta; admite coincidencia parcial cuando una ventana larga está truncada o desplazada.</li>
+<li>Sólo usa proximidad temporal sin texto si existe exactamente un candidato dentro de una ventana corta.</li>
+<li><code>display(cells)</code> comprueba que las celdas coincidan con <code>pre_writeCells</code>, permitiendo sólo el recorte o relleno cero que hace NVDA.</li>
+</ol>
+<p>Incluso con todas esas evidencias el resultado es <code>PROBABLE</code>, porque otra actualización podría intercalarse entre colas. Si hay candidatos ambiguos o buffers incompatibles, el origen queda <code>UNKNOWN</code>.</p>
+<p><code>rawText</code> se conserva además como <strong>texto legible asociado</strong> aunque no exista ningún evento externo. Este dato describe el texto de la ventana que NVDA relaciona con las celdas, pero no confirma el origen del frame. Si el contexto y el buffer final no son compatibles, tampoco se reutiliza ese texto.</p>
+<p>Cuando faltan tanto <code>rawText</code> como texto externo, el visor puede presentar una traducción inversa aproximada. Esa ayuda no cambia el origen ni la confianza del frame y nunca se almacena como evidencia confirmada.</p>
+<h2>Concurrencia y mensajes repetidos</h2>
+<ul>
+<li>Los eventos se ordenan por IDs y tiempo monotónico.</li>
+<li>Un evento elegido queda reservado hasta el siguiente <code>display</code> del mismo hilo.</li>
+<li>Para textos exactos repetidos se consume primero el evento pendiente más antiguo, siguiendo el orden de la cola.</li>
+<li>Dos eventos recientes con texto no coincidente impiden la correlación exclusivamente temporal.</li>
+<li>Una actualización de foco que produzca otro buffer no hereda la atribución si las celdas no coinciden.</li>
+</ul>
+<h2>Punto privado y restauración</h2>
+<p>NVDA no ofrece un punto de extensión público específico para Controller Client braille messages. <code>braille.extensions._pre_showBrailleMessage</code> es privado, no aporta texto y también cubre otros mensajes. Interceptar <code>BrailleHandler.message</code> mezclaría mensajes internos con externos.</p>
+<p>Por eso se usa como último recurso <code>NVDAHelper._setDllFuncPointer</code> para redirigir sólo <code>_nvdaController_brailleMessage</code>. El componente:</p>
+<ul>
+<li>comprueba que los símbolos existan;</li>
+<li>impide parches duplicados;</li>
+<li>consulta el PID mientras conserva el contexto de la llamada RPC;</li>
+<li>delega en el callback original y devuelve su código;</li>
+<li>mantiene vivo el callback <code>WINFUNCTYPE</code>;</li>
+<li>restaura el puntero original en <code>terminate</code>;</li>
+<li>no modifica ningún archivo del núcleo de NVDA.</li>
+</ul>
+<p>Si una versión futura cambia los símbolos del callback, el driver y la captura de nivel B siguen funcionando; únicamente se desactiva el historial de eventos externos y NVDA registra una advertencia. Si cambia o falla la consulta RPC, los eventos todavía se capturan con texto, pero sin PID ni ejecutable.</p>
+<h2>Identificación cooperativa futura</h2>
+<p>Una aplicación propia podría enviar antes un mensaje por named pipe local con PID, <code>applicationId</code>, texto y <code>correlationId</code>. Esa información permitiría una asociación explícita cuando se diseñe un protocolo autenticado y con límites. No forma parte de 0.1.0 y no es necesaria para capturar aplicaciones existentes.</p>
+<h2>Contexto de aplicación por frame</h2>
+<p>Además del origen, cada frame guarda un bloque de <strong>contexto</strong> obtenido dentro de
+<code>pre_writeCells</code>, cuando el búfer que produjo las celdas todavía está montado:</p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Procedencia exacta en NVDA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bufferKind</code></td>
+<td>Comparación de identidad entre <code>handler.buffer</code>, <code>handler.mainBuffer</code> y <code>handler.messageBuffer</code>.</td>
+</tr>
+<tr>
+<td><code>tether</code></td>
+<td><code>braille.handler.getTether()</code>.</td>
+</tr>
+<tr>
+<td><code>contextProcessId</code></td>
+<td><code>region.obj.processID</code> de la primera región visible del búfer.</td>
+</tr>
+<tr>
+<td><code>contextProcessName</code></td>
+<td><code>region.obj.appModule.appName</code>.</td>
+</tr>
+<tr>
+<td><code>contextWindowTitle</code></td>
+<td><code>region.obj.name</code>.</td>
+</tr>
+<tr>
+<td><code>contextObjectRole</code></td>
+<td><code>region.obj.role.displayString</code>.</td>
+</tr>
+<tr>
+<td><code>regionCount</code></td>
+<td>Número de regiones visibles inspeccionadas, hasta ocho.</td>
+</tr>
+</tbody>
+</table>
+<p>Ese PID responde a la pregunta «¿de qué aplicación es el contenido que NVDA estaba
+representando?». <strong>No</strong> responde a «¿qué proceso llamó a <code>nvdaController_brailleMessage</code>?».</p>
+<p>Son preguntas distintas y el complemento nunca las mezcla:</p>
+<ul>
+<li>Un mensaje del Controller Client crea una <code>TextRegion</code> sin objeto asociado, de modo que el
+  contexto no aporta PID. La identidad del cliente sólo llega por el
+  <code>ExternalBrailleEvent</code> con el PID de RPC.</li>
+<li>Un frame de navegación sí tiene objeto y, por tanto, contexto de aplicación, pero no hubo
+  ninguna llamada externa que atribuir.</li>
+</ul>
+<p>Por eso el visor muestra dos campos separados: <strong>aplicación cuyo contenido se representaba</strong>
+(contexto) y <strong>aplicación solicitante</strong> (evidencia RPC del evento externo).</p>
+<h2>Filtro por aplicación elegido por el usuario</h2>
+<p>El complemento ofrece un gesto que captura el PID de la aplicación enfocada <strong>en el momento en
+que el usuario pulsa la tecla</strong>, antes de mostrar ninguna ventana propia. Ese PID se usa para
+filtrar lo que se muestra en el visor.</p>
+<p>Esto no contradice la regla de no confundir foco con proceso llamante:</p>
+<ul>
+<li>el PID no se escribe en el frame ni cambia su origen ni su confianza;</li>
+<li>es una decisión explícita del usuario sobre qué quiere ver;</li>
+<li>el filtro compara con el PID de contexto y con el PID confirmado de un evento externo
+  correlacionado, nunca con una suposición.</li>
+</ul>
+<p>Al abrir el visor con el gesto, el foco todavía pertenece a la aplicación del usuario. Si se
+pulsa el botón equivalente ya dentro del visor, la aplicación enfocada es el propio visor: la
+interfaz lo advierte explícitamente en lugar de guardar un dato engañoso.</p>
+</body>
+</html>

@@ -1,0 +1,14 @@
+# Comportamiento predeterminado para quien no tenga core.autocrlf configurado.
+# Se normaliza a LF en el repositorio: el flujo de trabajo de GitHub Actions se
+# ejecuta en Linux y vuelve a escribir en estos mismos archivos.
+* text=auto eol=lf
+
+# Archivos que nunca deben pasar por conversión de fin de línea.
+*.mo binary
+*.png binary
+*.wav binary
+*.nvda-addon binary
+
+# Los .po se tratan como texto, pero sin normalizar su codificación.
+*.po text eol=lf
+*.pot text eol=lf

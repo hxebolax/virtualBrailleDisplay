@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="../style.css" media="screen">
+<title>Virtual Braille Display 2026.08.30</title>
+</head>
+<body>
+<h1>Pruebas</h1>
+<h2>Pruebas unitarias automatizadas</h2>
+<p>Comando:</p>
+<p><code>powershell
+python -m unittest discover -s tests -t . -v</code></p>
+<p>La suite cubre:</p>
+<ul>
+<li>los 256 desplazamientos byte -&gt; Unicode Braille;</li>
+<li>cada bit -&gt; punto 1 a 8;</li>
+<li>hexadecimal, decimal, binario y puntos activos;</li>
+<li>valores y tamaños inválidos;</li>
+<li>historial acotado, limpieza e IDs;</li>
+<li>comparación de cambios, adiciones y eliminaciones;</li>
+<li>serialización TXT, JSON y JSONL;</li>
+<li>correlación exacta, ambigüedad temporal, buffer incompatible, relleno y recorte.</li>
+<li>instalación/restauración del hook, delegación al callback original y captura de PID/ejecutable RPC.</li>
+<li>conservación del texto legible sin evento externo y exportación UTF-8 con caracteres no ASCII.</li>
+<li>imports de la clase base, de los gestos y de <code>pre_writeCells</code> en las arquitecturas 2026.1 y 2026.3.</li>
+<li>traducción inversa aproximada mediante liblouis en NVDA 2026.1 y mediante <code>louisHelper</code> moderno.</li>
+<li>lectura, validación y persistencia de todas las opciones declaradas en <code>CONFIG_SPEC</code>.</li>
+<li>filtrado del historial por proceso, enumeración de procesos observados y estadísticas.</li>
+<li>observaciones del diagnóstico: línea en blanco, línea llena, ocupación real y ausencia de proceso.</li>
+<li>reparto del mismo buffer en ventanas de otro tamaño sin perder ni alterar ningún byte.</li>
+<li>registro continuo en JSONL y en texto, formatos rechazados, carpeta inexistente y parada limpia.</li>
+</ul>
+<p>Resultado de la ejecución de la versión 2026.08.30: <strong>64 pruebas superadas</strong>.</p>
+<h2>Lista de pruebas manuales</h2>
+<ol>
+<li>Seleccionar <code>Virtual Braille Display</code> y navegar por controles: deben aparecer frames con origen desconocido.</li>
+<li>Ejecutar <code>examples/test_accessible_output2.py</code> y enviar braille: debe aparecer un evento Controller Client con PID/ejecutable y un frame probable.</li>
+<li>Ejecutar <code>examples/wx_test_app.py</code>: probar ambos botones.</li>
+<li>Ejecutar dos instancias y enviar mensajes distintos rápidamente: no debe atribuirse un frame cuando haya ambigüedad.</li>
+<li>Cambiar el foco mientras llega un mensaje: el frame incompatible debe quedar desconocido.</li>
+<li>Cambiar la tabla de salida de NVDA y repetir el mismo texto: comparar bytes.</li>
+<li>Cambiar de 40 a 20 celdas: comprobar reinicialización y nuevo frame de 20 bytes.</li>
+<li>Desconectar, enviar un mensaje, reconectar y verificar que el historial anterior permanece.</li>
+<li>Pausar y congelar: comprobar que los IDs siguen avanzando.</li>
+<li>Exportar cada formato y revisar la advertencia de privacidad.</li>
+<li>Navegar por texto con acentos o símbolos y comprobar que <strong>Texto legible asociado</strong> coincide y se conserva al exportar en UTF-8.</li>
+<li>Abrir Configuración: el foco debe caer en el cuaderno de pestañas; al tabular, NVDA debe anunciar el nombre y el valor de cada control, incluido <strong>Celdas por fila</strong>, y no detenerse separadamente en las etiquetas.</li>
+<li>Recorrer Resumen amigable, Datos técnicos, las dos listas, Comparación, Simulación e Interacción; cada control debe anunciar su propósito.</li>
+<li>Mantener el foco dentro del visor y comprobar que no crea un bucle de frames visible; usar <strong>Actualizar ahora</strong> para cargar una instantánea.</li>
+<li>Comparar dos frames y comprobar que se anuncien textos anterior/actual, resumen y cambios de puntos en español.</li>
+<li>En una lista, moverse con flecha derecha e izquierda: NVDA debe anunciar fila, columna y contenido según la configuración; en los extremos debe avisar de primera o última columna salvo que esté activada la vuelta.</li>
+<li>Pulsar Ctrl+1 a Ctrl+9 en una lista: debe anunciarse directamente la columna correspondiente y avisarse si no existe.</li>
+<li>Desactivar en Configuración el número de fila y la cabecera: al recorrer columnas sólo debe decirse el contenido.</li>
+<li>Activar «Anunciar sólo por voz» y comprobar que la línea braille deja de recibir los anuncios de columna.</li>
+<li>Pulsar Ctrl+Mayús+C sobre una celda y comprobar que se copia su texto íntegro, no el recortado por Windows.</li>
+<li>Desde una aplicación cualquiera, pulsar el gesto <strong>Abre el visor filtrado por la aplicación que tiene el foco</strong>: NVDA debe anunciar el nombre y el PID capturados y el visor debe mostrar sólo frames de ese proceso.</li>
+<li>Con el filtro activo, usar otra aplicación y comprobar que sus frames no aparecen; pulsar <strong>Quitar filtro</strong> y comprobar que vuelven a verse.</li>
+<li>Pulsar el botón <strong>Filtrar por aplicación enfocada</strong> desde dentro del visor: debe advertir de que la aplicación enfocada es el propio visor.</li>
+<li>En Comparación, elegir Frame A y Frame B en los desplegables y comparar; probar también <strong>Comparar los dos últimos</strong> y <strong>Comparar antepenúltimo con último</strong>.</li>
+<li>Seleccionar un frame en el historial, pulsar <strong>Usar el frame mostrado como B</strong> y comparar.</li>
+<li>En Simulación de tamaño, elegir 20 celdas con un frame largo y comprobar cuántas ventanas harían falta.</li>
+<li>Poner 2 o más filas en Configuración, comprobar que NVDA reinicializa el driver y que <strong>Reparto por filas</strong> muestra el contenido dividido.</li>
+<li>En Interacción, indicar una celda y simular la tecla de encaminamiento: el cursor debe desplazarse en la aplicación.</li>
+<li>En Interacción, marcar puntos 1, 2 y 5 y enviar el acorde en un campo de edición: NVDA debe escribir el carácter correspondiente.</li>
+<li>Usar <strong>Desplazar atrás</strong> y <strong>Desplazar adelante</strong> con un texto más largo que la línea.</li>
+<li>Abrir la <strong>explicación sencilla</strong> con un frame en blanco: debe aparecer el aviso de que la línea se queda vacía.</li>
+<li>Abrir la explicación sencilla con un texto que llene la línea: debe avisar de un posible recorte.</li>
+<li>Activar el registro continuo con un archivo JSONL, generar frames, desactivarlo y comprobar el contenido del archivo.</li>
+<li>Activar «No guardar frames vacíos» y «No guardar frames repetidos» y comprobar que el historial deja de crecer con actualizaciones redundantes.</li>
+<li>Pulsar el gesto <strong>Anuncia el último frame recibido</strong> sin abrir ninguna ventana.</li>
+<li>Abrir <strong>NVDA &gt; Herramientas</strong>: debe haber un único submenú <strong>Virtual Braille Display</strong>, no elementos sueltos, y recorrerlo con las flechas debe anunciar cada elemento.</li>
+<li>Desde el submenú, usar <strong>Conectar la línea virtual</strong> y <strong>Desconectar la línea virtual</strong>: NVDA debe anunciar el resultado de cada acción.</li>
+<li>Desde una aplicación cualquiera, abrir el submenú y elegir <strong>Filtrar por la aplicación que tenía el foco</strong>: debe anunciar el nombre y el PID de esa aplicación, nunca los de NVDA.</li>
+<li>Desde el submenú, abrir <strong>Configuración…</strong> y comprobar que el diálogo se comporta como modal y que al cerrarlo el foco vuelve a su sitio.</li>
+<li>Desde el submenú, abrir <strong>Ayuda del complemento</strong> y comprobar que se muestra la documentación instalada.</li>
+<li>Desactivar el complemento en el Almacén de complementos y comprobar que el submenú desaparece por completo del menú Herramientas.</li>
+<li>Elegir <strong>Conectar la línea virtual</strong> en el submenú y comprobar que el aviso se escucha <strong>entero</strong> después de que NVDA anuncie la ventana que recupera el foco, sin quedar cortado.</li>
+<li>Repetir la comprobación con <strong>Desconectar</strong>, <strong>Filtrar por la aplicación que tenía el foco</strong>, <strong>Quitar el filtro</strong> y <strong>Anunciar el último frame</strong>.</li>
+<li>Poner en <strong>Configuración &gt; Listas y avisos</strong> el modo «Mostrarlos en un cuadro de mensaje» y comprobar que las acciones del menú abren un cuadro en vez de hablar.</li>
+<li>Poner el modo «Las dos cosas» y comprobar que se hace lo uno y lo otro.</li>
+</ol>
+<h2>Condiciones necesarias para mensajes externos</h2>
+<ul>
+<li>NVDA debe estar ejecutándose.</li>
+<li>El backend de accessible-output2 debe detectar NVDA.</li>
+<li>NVDA debe tener habilitado el informe braille de regiones dinámicas.</li>
+<li>Los mensajes braille no deben estar desactivados.</li>
+<li>Debe usarse <code>braille(text)</code> explícitamente con la versión de <code>Auto</code> analizada.</li>
+</ul>
+<p>Las pruebas unitarias no sustituyen la prueba dentro de un proceso NVDA real; validan las piezas puras y las reglas que evitan atribuciones falsas.</p>
+</body>
+</html>
