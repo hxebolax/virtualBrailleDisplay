@@ -88,10 +88,18 @@ que no hay que configurar la etiqueta en dos sitios ni pueden desincronizarse.</
 <p>La consecuencia práctica es útil: el tercer número queda libre para correcciones que no cambian
 textos ni documentación. Puede publicar <code>2026.08.31</code> sin generar una release de recursos nueva, y
 los usuarios seguirán recibiendo los recursos de <code>recursos_2026.08</code>.</p>
-<p>Si algún día quisiera fijar una etiqueta manualmente, tendría que definirla <strong>a la vez</strong> en
-<code>TAG_RELEASE</code> del flujo de trabajo y en el parámetro <code>tag_release</code> del constructor de
-<code>ActualizadorRecursos</code>. Si no coinciden, la API de GitHub devuelve 404 y el complemento deja de
-buscar recursos en silencio. Por eso se usa el modo automático.</p>
+<h3>Cómo la calcula el complemento</h3>
+<p><code>ActualizadorRecursos</code> puede deducir la etiqueta por su cuenta, pero para ello busca el
+complemento entre los instalados comparando rutas. Si esa búsqueda fallara, la etiqueta caería
+en <code>recursos-latest</code>, que no existe: la API devolvería 404 y el complemento dejaría de buscar
+recursos <strong>en silencio</strong>.</p>
+<p>Para eliminar ese riesgo, el módulo <code>versioning.py</code> calcula la etiqueta con la misma regla del
+flujo de trabajo, a partir de la versión que declara NVDA o, en su defecto, del <code>manifest.ini</code>
+instalado. <code>resourceUpdates.py</code> la pasa explícitamente en <code>tag_release</code>. Así no depende de una
+comparación de rutas y sigue siendo imposible que se desincronice del flujo de trabajo, porque
+la regla es una sola y está cubierta por pruebas en <code>tests/test_versioning.py</code>.</p>
+<p>Si alguna vez quisiera fijar una etiqueta a mano, tendría que definirla <strong>a la vez</strong> en
+<code>TAG_RELEASE</code> del flujo de trabajo y en <code>resourceUpdates.py</code>.</p>
 <hr />
 <h2>Para quien usa el complemento</h2>
 <p>El complemento comprueba si hay recursos nuevos al iniciar NVDA, como mucho una vez cada 24
@@ -156,6 +164,10 @@ HTML dentro del <code>.nvda-addon</code>.</p>
 <tr>
 <td><code>addon/globalPlugins/virtualBrailleDisplay/resourceUpdates.py</code></td>
 <td>Integración del módulo anterior con este complemento.</td>
+</tr>
+<tr>
+<td><code>addon/globalPlugins/virtualBrailleDisplay/versioning.py</code></td>
+<td>Cálculo de la etiqueta de recursos, con pruebas.</td>
 </tr>
 </tbody>
 </table>

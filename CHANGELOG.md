@@ -76,6 +76,9 @@
 - Nueva pestaña **Actualizaciones** en la configuración, con comprobación automática e intervalo.
 - Nuevo elemento de menú y gesto para buscar recursos nuevos manualmente.
 - Nuevo documento `docs/traducciones.md` con el flujo completo.
+- Módulo `versioning.py` que calcula la etiqueta de recursos con la misma regla que el flujo de
+  trabajo y la pasa explícitamente. Evita que una deducción fallida caiga en `recursos-latest`,
+  una etiqueta inexistente que haría que el complemento dejase de buscar recursos en silencio.
 - Corrección local del flujo de trabajo: buscaba `readme.md` en minúsculas, que en Linux no
   encuentra el `README.md` del repositorio.
 

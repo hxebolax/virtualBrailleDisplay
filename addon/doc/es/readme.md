@@ -307,8 +307,8 @@ cuando quiera desde **Herramientas > Virtual Braille Display > Buscar traduccion
 documentación nuevas**. Sólo se descargan traducciones y documentación: nunca código.
 
 La etiqueta de la release de recursos se calcula sola desde la versión del complemento: con
-`2026.08.30` es `recursos_2026.08`. El mismo cálculo lo hacen el flujo de trabajo y el
-complemento, así que no pueden desincronizarse.
+`2026.08.30` es `recursos_2026.08`. El flujo de trabajo y el complemento usan la misma regla, y
+esa regla está cubierta por pruebas, así que no pueden desincronizarse.
 
 El detalle completo, incluido qué conviene saber al traducir, está en
 [`docs/traducciones.md`](docs/traducciones.md).

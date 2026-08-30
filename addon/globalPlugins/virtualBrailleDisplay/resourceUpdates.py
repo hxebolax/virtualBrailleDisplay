@@ -11,6 +11,8 @@ tanto en el flujo de trabajo de GitHub como aquí, sin necesidad de configurarla
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import addonHandler
 import wx
 from logHandler import log
@@ -19,10 +21,26 @@ addonHandler.initTranslation()
 
 from . import config as addonConfig  # noqa: E402
 from .messages import reportAction  # noqa: E402
+from .versioning import resourceTagForVersion, versionFromManifest  # noqa: E402
 
 # Repositorio del que se descargan las traducciones y la documentación.
 GITHUB_USER = "hxebolax"
 GITHUB_REPOSITORY = "virtualBrailleDisplay"
+
+
+def installedVersion() -> str:
+	"""Devuelve la versión instalada del complemento consultando primero a NVDA."""
+	try:
+		return str(addonHandler.getCodeAddon().version)
+	except Exception:
+		log.debugWarning("No se pudo consultar la versión con addonHandler", exc_info=True)
+	# Respaldo: leer el manifest instalado, que siempre acompaña al complemento.
+	try:
+		manifestPath = Path(__file__).resolve().parents[2] / "manifest.ini"
+		return versionFromManifest(manifestPath.read_text(encoding="utf-8"))
+	except Exception:
+		log.debugWarning("No se pudo leer la versión del manifest instalado", exc_info=True)
+		return ""
 
 
 class ResourceUpdateService:
@@ -47,6 +65,17 @@ class ResourceUpdateService:
 		if self._updater is not None:
 			return
 		automatic = addonConfig.getBoolean("resourceUpdatesEnabled")
+		# La etiqueta se calcula aquí, a partir de la versión instalada, y se pasa explícita.
+		# El módulo la deduciría por su cuenta, pero si esa deducción fallara caería en
+		# «recursos-latest», que no existe: la API devolvería 404 y el complemento dejaría de
+		# buscar recursos en silencio. Calcularla con la misma regla del flujo de trabajo
+		# elimina ese riesgo sin desincronizar nada.
+		options: dict[str, object] = {}
+		tag = resourceTagForVersion(installedVersion())
+		if tag:
+			options["tag_release"] = tag
+		else:
+			log.warning("No se pudo determinar la etiqueta de recursos; se usará la automática")
 		try:
 			from .actualizadorRecursos import ActualizadorRecursos
 
@@ -54,6 +83,7 @@ class ResourceUpdateService:
 				GITHUB_USER,
 				GITHUB_REPOSITORY,
 				modo_comprobacion="inicio" if automatic else "manual",
+				**options,
 				intervalo_horas=addonConfig.getInteger("resourceUpdateIntervalHours"),
 				# El complemento se encarga de los avisos para que también se oigan
 				# cuando la acción se pide desde el menú de NVDA.

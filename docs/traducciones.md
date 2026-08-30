@@ -92,10 +92,21 @@ La consecuencia práctica es útil: el tercer número queda libre para correccio
 textos ni documentación. Puede publicar `2026.08.31` sin generar una release de recursos nueva, y
 los usuarios seguirán recibiendo los recursos de `recursos_2026.08`.
 
-Si algún día quisiera fijar una etiqueta manualmente, tendría que definirla **a la vez** en
-`TAG_RELEASE` del flujo de trabajo y en el parámetro `tag_release` del constructor de
-`ActualizadorRecursos`. Si no coinciden, la API de GitHub devuelve 404 y el complemento deja de
-buscar recursos en silencio. Por eso se usa el modo automático.
+### Cómo la calcula el complemento
+
+`ActualizadorRecursos` puede deducir la etiqueta por su cuenta, pero para ello busca el
+complemento entre los instalados comparando rutas. Si esa búsqueda fallara, la etiqueta caería
+en `recursos-latest`, que no existe: la API devolvería 404 y el complemento dejaría de buscar
+recursos **en silencio**.
+
+Para eliminar ese riesgo, el módulo `versioning.py` calcula la etiqueta con la misma regla del
+flujo de trabajo, a partir de la versión que declara NVDA o, en su defecto, del `manifest.ini`
+instalado. `resourceUpdates.py` la pasa explícitamente en `tag_release`. Así no depende de una
+comparación de rutas y sigue siendo imposible que se desincronice del flujo de trabajo, porque
+la regla es una sola y está cubierta por pruebas en `tests/test_versioning.py`.
+
+Si alguna vez quisiera fijar una etiqueta a mano, tendría que definirla **a la vez** en
+`TAG_RELEASE` del flujo de trabajo y en `resourceUpdates.py`.
 
 ---
 
@@ -143,6 +154,7 @@ HTML dentro del `.nvda-addon`.
 | `scons_idiomas.py` | Compilación local equivalente a la del flujo de trabajo. |
 | `addon/globalPlugins/virtualBrailleDisplay/actualizadorRecursos.py` | Módulo que descarga e instala los recursos. |
 | `addon/globalPlugins/virtualBrailleDisplay/resourceUpdates.py` | Integración del módulo anterior con este complemento. |
+| `addon/globalPlugins/virtualBrailleDisplay/versioning.py` | Cálculo de la etiqueta de recursos, con pruebas. |
 
 `actualizadorRecursos.py` y `scons_idiomas.py` proceden de
 [Actualizador-Recursos-NVDA](https://github.com/hxebolax/Actualizador-Recursos-NVDA) y se
